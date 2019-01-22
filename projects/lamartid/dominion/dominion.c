@@ -1245,7 +1245,8 @@ void smithy_play(
     drawCard(currentPlayer, state);
   }
   // discard card from hand
-  discardCard(handPos, currentPlayer, state, 0);
+  // BUG - TRASH FLAG CHANGED FROM 0 TO 1
+  discardCard(handPos, currentPlayer, state, 1);
 }
 
 void adventurer_play(
@@ -1256,7 +1257,8 @@ void adventurer_play(
   // Reveal (draw) cards from deck until 2 treasure pulled; discard remainder
   while(drawntreasure < 2){
     // If deck empty, shuffle discard pile & add to deck
-    if (state->deckCount[currentPlayer] < 1){
+    // BUG - CONDITIONAL CHANGED SO THAT SHUFFLE WILL HAPPEN EVEN WHEN NOT NECESSARY
+    if (state->deckCount[currentPlayer] < 5){
       shuffle(currentPlayer, state);
     }
     drawCard(currentPlayer, state);
@@ -1285,6 +1287,8 @@ void council_room_play(int currentPlayer, struct gameState *state, int handPos){
   }
   // +1 buy
   state->numBuys++;
+  // BUG - ADDING AN ACTION INNAPPROPRIATELY MAKES COUNCIL ROOM NO LONGER A TERMINAL
+  state->numActions++;
   // Each other player draws a cardDrawn
   for (int idx = 0; idx < state->numPlayers; idx++){
     if (idx != currentPlayer){
@@ -1337,9 +1341,11 @@ void steward_play(
   else{
     // trash 2 cards in hand
     discardCard(choice2, currentPlayer, state, 1);
-    discardCard(choice3, currentPlayer, state, 1);
+    // discardCard(choice3, currentPlayer, state, 1);
+    discardCard(handPos, currentPlayer, state, 1);
   }
   // discard card from hand
-  discardCard(handPos, currentPlayer, state, 0);
+  // discardCard(handPos, currentPlayer, state, 0);
+  discardCard(choice3, currentPlayer, state, 0);
 }
 //end of dominion.c
