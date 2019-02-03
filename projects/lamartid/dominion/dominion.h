@@ -49,7 +49,9 @@ enum CARD
    outpost,
    salvager, /* choice1 = hand# to trash */
    sea_hag,
-   treasure_map
+   treasure_map,
+
+   cards_count  // count of cards to randomize a draw
   };
 
 struct gameState {
