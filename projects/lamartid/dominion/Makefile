@@ -43,7 +43,10 @@ unittestresults.out: test_helpers.o dominion.o rngs.o unittest1.c
 	echo "Unit test 1:" >> unittestresults.out
 	gcc -o unittest1 unittest1.c test_helpers.o dominion.o rngs.o $(CFLAGS)
 	./unittest1 >> unittestresults.out
-	gcov dominion.c $(GFLAGS) >> unittestresults.out
+	./foobar.sh >> unittestresults.out
+
+
+	#gcov dominion.c $(GFLAGS) >> unittestresults.out
 
 all: playdom player
 

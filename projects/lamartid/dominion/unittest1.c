@@ -69,8 +69,6 @@ int main(){
             printf("Verifying that re-ordering occured...");
 #endif
             assertTrue(diffOrder(oldDeck, deckCount, G.deck[p], G.deckCount[p]));
-            printArray(oldDeck, deckCount);
-            printArray(G.deck[p], G.deckCount[p]);
             }
         }
     }
