@@ -1272,6 +1272,7 @@ void adventurer_play(
       state->handCount[currentPlayer]--;
       z++;
     }
+    discardCard(handPos, currentPlayer, state, 0);
   }
   while(z - 1 >= 0){
     // Discard all cards in play that have been drawn

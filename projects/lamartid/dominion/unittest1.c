@@ -7,11 +7,6 @@
 *       else sort cards in deck array to ensure determinism in shuffle
 *   Randomly assign cards in deck array to newDeck array
 *   Assign all elements of deck array to corresponding elements of newDeck
-*
-* Verify that:
-*   deck count is the same before and after shuffle
-*   The deck contains the exact same set of cards before and after the shuffle
-*   The shuffle truly changed the order of the deck
 *******************************************************************************/
 
 #include "dominion.h"
@@ -26,16 +21,16 @@
 // Set NOISY_TEST to 0 to remove printfs from output
 #define NOISY_TEST 1
 #define SEPARATE separate('*', 80)
+#define SPACE printf("\n")
 
-int main(){
-    srand(time(0));     // Seed random number generator required for random card
+int main(int argc, char *argv[]){
     int numPlayer = 2;  // Test outputs for multiple players, not just 1
     int deckCounts[] = {0, 1, 2, 52}; // deck counts to test
     int countsSize = 4;
     int shuffleThreshold = 52; // >= threshold, check reordering
     struct gameState G; // Need to pass a gameState struct to shuffle()
 
-    /*  Manually set deck count and randomize deck
+    /*  Manually set deck count and build deck
         Call shuffle
         Check deck count and values now contained in deck
         For large enough values, check that re-ordering occured */
@@ -51,7 +46,7 @@ int main(){
 #endif
             memset(&G, 23, sizeof(struct gameState));   // clear game state
             G.deckCount[p] = deckCount;                 // set deckCount
-            randomDeck(G.deck[p], deckCount);           // randomize deck
+            consecutiveDeck(G.deck[p], deckCount);      // build deck
             int oldDeck[deckCount];                     // "old" deck to compare
             copyArray(G.deck[p], deckCount, oldDeck, deckCount);
             shuffle(p, &G);
@@ -66,10 +61,12 @@ int main(){
             /* Check shuffle */
             if (deckCount >= shuffleThreshold){
 #if (NOISY_TEST == 1)
-            printf("Verifying that re-ordering occured...");
+                printf("Verifying that re-ordering occurred...");
 #endif
-            assertTrue(diffOrder(oldDeck, deckCount, G.deck[p], G.deckCount[p]));
+                assertTrue(diffOrder(oldDeck, deckCount, G.deck[p], G.deckCount[p]));
             }
         }
     }
+    SPACE;
+    return 0;
 }
