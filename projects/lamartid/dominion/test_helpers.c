@@ -153,19 +153,19 @@ void consecutiveDeckSelect(int *deck, int deck_size, int card, int card_num){
     if (deck_size < card_num){
         return;
     }
-     int i;
-     for (i = 0; i < card_num; i++){
-         deck[i] = card;
-     }
-     for (i; i < deck_size; i++){
-         if (next_card == card){
-             next_card++;
-         }
-         if (next_card >= cards_count){
-             next_card = 0;
-         }
-         deck[i] = next_card;
-     }
+    int i;
+    for (i = 0; i < card_num; i++){
+        deck[i] = card;
+    }
+    for (; i < deck_size; i++){
+        if (next_card == card){
+            next_card++;
+        }
+        if (next_card >= cards_count){
+            next_card = 0;
+        }
+        deck[i] = next_card;
+    }
 }
 void randomDeckSelect(int *deck, int deck_size, int card, int card_num){
     // Populates card array with specific number of occurences of specific card,
@@ -178,11 +178,21 @@ void randomDeckSelect(int *deck, int deck_size, int card, int card_num){
     for (i = 0; i < card_num; i++){
         deck[i] = card;
     }
-    for (i; i < deck_size; i++){
+    for (; i < deck_size; i++){
         deck[i] = randomCard();
         if (deck[i] == card){
             deck[i] = pickAnotherCard(deck[i]);
         }
     }
     genericShuffle(deck, deck_size);
+}
+int countTreasure(int *cards, int size){
+    // Counts the number of treasure cards within a card array
+    int treasure_count = 0;
+    for (int i = 0; i < size; i++){
+        if (cards[i] == copper || cards[i] == silver || cards[i] == gold){
+            treasure_count++;
+        }
+    }
+    return treasure_count;
 }

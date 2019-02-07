@@ -25,3 +25,4 @@ void randomDeck(int deck[], int deck_size);
 void genericShuffle(int *arr, int size);
 void consecutiveDeckSelect(int *deck, int deck_size, int card, int card_num);
 void randomDeckSelect(int *deck, int deck_size, int card, int card_num);
+int countTreasure(int *cards, int size);

@@ -1,7 +1,8 @@
-CFLAGS = -Wall -fpic -coverage -lm -std=c99
+CFLAGS = -Wall -lm -std=c99
+GFLAGS = -Wall -fpic -coverage -lm -std=c99
 
 test_helpers.o: test_helpers.h test_helpers.c
-	gcc -c test_helpers.c -g $(FLAGS)
+	gcc -c test_helpers.c -g $(CFLAGS)
 
 rngs.o: rngs.h rngs.c
 	gcc -c rngs.c -g  $(CFLAGS)
@@ -37,56 +38,57 @@ player: player.c interface.o
 
 unittestresults: unittestresults.out
 
-unittestresults.out: test_helpers.o dominion.o rngs.o unittest1.c unittest2.c
+unittestresults.out: test_helpers.c dominion.c rngs.c
 	echo "Unit test results -- non-card function tests:" > unittestresults.out
 
-	echo "Unit test 1:" >> unittestresults.out
-	gcc -o unittest1 unittest1.c test_helpers.o dominion.o rngs.o $(CFLAGS)
+	echo "\nUnit test 1:" >> unittestresults.out
+	gcc -o unittest1 unittest1.c test_helpers.c dominion.c rngs.c $(GFLAGS)
 	./unittest1 >> unittestresults.out
 	./run_gcov.sh shuffle >> unittestresults.out
+	#./analyze_gcov.sh "function shuffle" "function playCard" >> unittestresults.out
 
-	echo "Unit test 2:" >> unittestresults.out
-	gcc -o unittest2 unittest2.c test_helpers.o dominion.o rngs.o $(CFLAGS)
+	echo "\nUnit test 2:" >> unittestresults.out
+	gcc -o unittest2 unittest2.c test_helpers.c dominion.c rngs.c $(GFLAGS)
 	./unittest2 >> unittestresults.out
 	./run_gcov.sh fullDeckCount >> unittestresults.out
 
-	echo "Unit test 3:" >> unittestresults.out
-	gcc -o unittest3 unittest3.c test_helpers.o dominion.o rngs.o $(CFLAGS)
+	echo "\nUnit test 3:" >> unittestresults.out
+	gcc -o unittest3 unittest3.c test_helpers.c dominion.c rngs.c $(GFLAGS)
 	./unittest3 >> unittestresults.out
 	./run_gcov.sh isGameOver >> unittestresults.out
 
-	echo "Unit test 4:" >> unittestresults.out
-	gcc -o unittest4 unittest4.c test_helpers.o dominion.o rngs.o $(CFLAGS)
+	echo "\nUnit test 4:" >> unittestresults.out
+	gcc -o unittest4 unittest4.c test_helpers.c dominion.c rngs.c $(GFLAGS)
 	./unittest4 >> unittestresults.out
 	./run_gcov.sh updateCoins >> unittestresults.out
 	#./analyze_gcov.sh "function updateCoins" "function smithy" >> unittestresults.out
 
-	echo "--------------------------------------------------------------------------------" >> unittestresults.out
+	echo "\n--------------------------------------------------------------------------------" >> unittestresults.out
 	echo "Unit test results -- card implementation function tests:" >> unittestresults.out
 
-	echo "Card test 1:" >> unittestresults.out
-	gcc -o cardtest1 cardtest1.c test_helpers.o dominion.o rngs.o $(CFLAGS)
+	echo "\nCard test 1:" >> unittestresults.out
+	gcc -o cardtest1 cardtest1.c test_helpers.c dominion.c rngs.c $(GFLAGS)
 	./cardtest1 >> unittestresults.out
 	./run_gcov.sh smithy_play >> unittestresults.out
 
-	echo "Card test 2:" >> unittestresults.out
-	gcc -o cardtest2 cardtest2.c test_helpers.o dominion.o rngs.o $(CFLAGS)
+	echo "\nCard test 2:" >> unittestresults.out
+	gcc -o cardtest2 cardtest2.c test_helpers.c dominion.c rngs.c $(GFLAGS)
 	./cardtest2 >> unittestresults.out
 	./run_gcov.sh PLACEHOLD >> unittestresults.out
 
-	echo "Card test 3:" >> unittestresults.out
-	gcc -o cardtest3 cardtest3.c test_helpers.o dominion.o rngs.o $(CFLAGS)
+	echo "\nCard test 3:" >> unittestresults.out
+	gcc -o cardtest3 cardtest3.c test_helpers.c dominion.c rngs.c $(GFLAGS)
 	./cardtest3 >> unittestresults.out
 	./run_gcov.sh PLACEHOLD >> unittestresults.out
 
-	echo "Card test 4:" >> unittestresults.out
-	gcc -o cardtest4 cardtest4.c test_helpers.o dominion.o rngs.o $(CFLAGS)
+	echo "\nCard test 4:" >> unittestresults.out
+	gcc -o cardtest4 cardtest4.c test_helpers.c dominion.c rngs.c $(GFLAGS)
 	./cardtest4 >> unittestresults.out
 	./run_gcov.sh PLACEHOLD >> unittestresults.out
 
 all: playdom player
 
-binaries=unittest1 unittest2 unittest3 unittest4
+binaries=unittest1 unittest2 unittest3 unittest4 cardtest1 cardtest2 cardtest3 cardtest4
 
 clean:
 	rm -f *.o *.exe $(binaries) playdom player player.exe  *.gcov *.gcda *.gcno *.so *.out testDrawCard testDrawCard.exe
