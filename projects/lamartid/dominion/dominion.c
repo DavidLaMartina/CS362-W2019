@@ -766,14 +766,8 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       return 0;
 
     case village:
-      //+1 Card
-      drawCard(currentPlayer, state);
-
-      //+2 Actions
-      state->numActions = state->numActions + 2;
-
-      //discard played card from hand
-      discardCard(handPos, currentPlayer, state, 0);
+      // +1 card, +2 actions, discard
+      village_play(currentPlayer, state, handPos);
       return 0;
 
     case baron:
@@ -1279,6 +1273,16 @@ void adventurer_play(
     state->discard[currentPlayer][state->discardCount[currentPlayer]++] = temphand[z-1];
     z = z - 1;
   }
+}
+void village_play(int currentPlayer, struct gameState *state, int handPos){
+    // +3 cards, discard one card from hand
+    drawCard(currentPlayer, state);
+
+    //+2 actions
+    state->numActions = state->numActions + 2;
+
+    // discard played card from hand
+    discardCard(handPos, currentPlayer, state, 0);
 }
 
 void council_room_play(int currentPlayer, struct gameState *state, int handPos){

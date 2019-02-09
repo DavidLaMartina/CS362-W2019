@@ -74,17 +74,17 @@ unittestresults.out: test_helpers.c dominion.c rngs.c
 	echo "\nCard test 2:" >> unittestresults.out
 	gcc -o cardtest2 cardtest2.c test_helpers.c dominion.c rngs.c $(GFLAGS)
 	./cardtest2 >> unittestresults.out
-	./run_gcov.sh PLACEHOLD >> unittestresults.out
+	./run_gcov.sh adventurer_play >> unittestresults.out
 
 	echo "\nCard test 3:" >> unittestresults.out
 	gcc -o cardtest3 cardtest3.c test_helpers.c dominion.c rngs.c $(GFLAGS)
 	./cardtest3 >> unittestresults.out
-	./run_gcov.sh PLACEHOLD >> unittestresults.out
+	./run_gcov.sh village_play >> unittestresults.out
 
 	echo "\nCard test 4:" >> unittestresults.out
 	gcc -o cardtest4 cardtest4.c test_helpers.c dominion.c rngs.c $(GFLAGS)
 	./cardtest4 >> unittestresults.out
-	./run_gcov.sh PLACEHOLD >> unittestresults.out
+	./run_gcov.sh council_room_play >> unittestresults.out
 
 all: playdom player
 

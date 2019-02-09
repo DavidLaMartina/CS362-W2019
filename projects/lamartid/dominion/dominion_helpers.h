@@ -20,6 +20,8 @@ void adventurer_play(
 	int currentPlayer, int drawntreasure, int z, int temphand[],
 	struct gameState *state, int handPos, int *bonus);
 
+void village_play(int currentPlayer, struct gameState *state, int handPos);
+
 void council_room_play(int currentPlayer, struct gameState *state, int handPos);
 
 int mine_play(
