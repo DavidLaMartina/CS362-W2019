@@ -24,6 +24,9 @@
 
 int main(int argc, char *argv[]){
     int numPlayer = 2;      // Test outputs for multiple players
+    int k[10] = {adventurer, council_room, feast, gardens, mine,
+                 remodel, smithy, village, baron, great_hall};
+    int seed = 1000;
     int pileCounts[] = {0, 5}; // Test multiple total pile counts
     int countsSize = 2;     // 2^3 total test runs (per player), given deck, hand, discard
     struct gameState G;     // Need to pass a gameState struct to fullDeckCount
@@ -44,6 +47,7 @@ int main(int argc, char *argv[]){
                     printf("Test player %d with %d card of interest in deck, %d in hand, %d in discard\n", p, deckIdx, handIdx, discIdx);
 #endif
                     memset(&G, 23, sizeof(struct gameState));   // clear state
+                    initializeGame(numPlayer, k, seed, &G);
                     G.deckCount[p] = deckCount;                 // set counts
                     G.handCount[p] = handCount;
                     G.discardCount[p] = discCount;

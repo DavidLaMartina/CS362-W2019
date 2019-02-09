@@ -25,6 +25,9 @@
 
 int main(int argc, char *argv[]){
     int numPlayer = 2;  // Test outputs for multiple players, not just 1
+    int k[10] = {adventurer, council_room, feast, gardens, mine,
+                 remodel, smithy, village, baron, great_hall};
+    int seed = 1000;
     int deckCounts[] = {0, 1, 2, 52}; // deck counts to test
     int countsSize = 4;
     int shuffleThreshold = 52; // >= threshold, check reordering
@@ -45,6 +48,7 @@ int main(int argc, char *argv[]){
             printf("Test player %d with %d card(s) in deck.\n", p, deckCount);
 #endif
             memset(&G, 23, sizeof(struct gameState));   // clear game state
+            initializeGame(numPlayer, k, seed, &G); // Init game
             G.deckCount[p] = deckCount;                 // set deckCount
             consecutiveDeck(G.deck[p], deckCount);      // build deck
             int oldDeck[deckCount];                     // "old" deck to compare
