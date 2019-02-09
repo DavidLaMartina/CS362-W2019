@@ -6,6 +6,7 @@
 char inputChar()
 {
     // Random selection of 'actual' characters, from SPACE to ~
+
     char space = ' ';
     int last_ascii = 127;
     int range = last_ascii - space;
@@ -24,16 +25,28 @@ char inputChar()
 
 char *inputString()
 {
+    const int MAX_LENGTH = 5;
+
+    char possible_chars[4] = {'r','e','s','t'};
+    int possible_size = 4;
+
     const char LOW_CHAR = 'a';
     const char HIGH_CHAR = 'z';
 
-    const int MAX_LENGTH = 5;
-    //int str_len = MAX_LENGTH;
-    int str_len = 1 + (rand() % MAX_LENGTH);
+    int str_len = MAX_LENGTH;
+    //int str_len = 1 + (rand() % MAX_LENGTH);
     char *input = malloc(sizeof(char) * str_len);
+
+    int idx;
+    for (int i = 0; i < str_len; i++){
+        idx = rand() % possible_size;
+        input[i] = possible_chars[idx];
+    }
+    /*
     for (int i = 0; i < str_len; i++){
         input[i] = LOW_CHAR + (rand() % (HIGH_CHAR - LOW_CHAR));
     }
+    */
     return input;
 }
 
@@ -73,7 +86,8 @@ void testme()
       printf("\nThe program took %f seconds to reach the error block\n", running_time);
 
       printf("error \n");
-      exit(200);
+      //exit(200);
+      return;
     }
     else{
         free(s);
@@ -85,6 +99,6 @@ void testme()
 int main(int argc, char *argv[])
 {
     srand(time(NULL));
-    testme();
+    testme();    
     return 0;
 }
