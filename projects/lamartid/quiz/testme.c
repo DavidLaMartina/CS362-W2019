@@ -52,8 +52,6 @@ char *inputString()
 
 void testme()
 {
-  clock_t start = clock();
-
   int tcCount = 0;
   char *s;
   char c;
@@ -80,11 +78,6 @@ void testme()
        && state == 9)                       // if the string is 5 'actual' characters
     {
       free(s);
-
-      clock_t stop = clock();
-      double running_time = (double)(stop - start) / CLOCKS_PER_SEC;
-      printf("\nThe program took %f seconds to reach the error block\n", running_time);
-
       printf("error \n");
       //exit(200);
       return;
@@ -99,6 +92,6 @@ void testme()
 int main(int argc, char *argv[])
 {
     srand(time(NULL));
-    testme();    
+    testme();
     return 0;
 }
