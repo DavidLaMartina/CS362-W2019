@@ -33,9 +33,10 @@ char *inputString()
     const char LOW_CHAR = 'a';
     const char HIGH_CHAR = 'z';
 
-    int str_len = MAX_LENGTH;
+    int str_len = 5;
     //int str_len = 1 + (rand() % MAX_LENGTH);
-    char *input = malloc(sizeof(char) * str_len);
+    //char *input = malloc(sizeof(char) * str_len);
+    static char input[5];
 
     int idx;
     for (int i = 0; i < str_len; i++){
@@ -77,13 +78,13 @@ void testme()
        && s[4] == 't' && s[5] == '\0'       // s[5] == '\0' will always be satisfied
        && state == 9)                       // if the string is 5 'actual' characters
     {
-      free(s);
+      //free(s);
       printf("error \n");
       //exit(200);
       return;
     }
     else{
-        free(s);
+        //free(s);
     }
   }
 }
