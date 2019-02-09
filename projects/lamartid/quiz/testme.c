@@ -5,9 +5,8 @@
 
 char inputChar()
 {
-    // Random selection of 'actual' characters, from SPACE to ~
-
     /*
+    // Random selection of 'actual' characters, from SPACE to ~
     char space = ' ';
     int last_ascii = 127;
     int range = last_ascii - space;
@@ -16,35 +15,33 @@ char inputChar()
 
     // Random selection of one of the 9 characters required to progress the
     // state from 0 to 9
-
     char possible_chars[] = {
     '[','(','{',' ','a','x','}',')',']'};
     int size = 9;
     int idx = rand() % size;
     return possible_chars[idx];
-    
 }
 
 char *inputString()
 {
-    const int MAX_LENGTH = 5;
+    char possible_chars[4] = {'r','e','s','t','\0'};
+    int possible_size = 5;
 
-    char possible_chars[4] = {'r','e','s','t'};
-    int possible_size = 4;
+    //const char LOW_CHAR = '\0';
+    //const char HIGH_CHAR = '~';
 
-    const char LOW_CHAR = 'a';
-    const char HIGH_CHAR = 'z';
-
-    int str_len = 5;
+    //int str_len = 5;
     //int str_len = 1 + (rand() % MAX_LENGTH);
     //char *input = malloc(sizeof(char) * str_len);
-    static char input[5];
+    static char input[6];
 
     int idx;
-    for (int i = 0; i < str_len; i++){
+    for (int i = 0; i < 6; i++){
         idx = rand() % possible_size;
         input[i] = possible_chars[idx];
     }
+    //char last_char = LOW_CHAR + (rand() % (HIGH_CHAR - LOW_CHAR));
+    //input[5] = last_char;
     /*
     for (int i = 0; i < str_len; i++){
         input[i] = LOW_CHAR + (rand() % (HIGH_CHAR - LOW_CHAR));
