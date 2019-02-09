@@ -24,7 +24,7 @@ char inputChar()
 
 char *inputString()
 {
-    char possible_chars[4] = {'r','e','s','t','\0'};
+    char possible_chars[5] = {'r','e','s','t','\0'};
     int possible_size = 5;
 
     //const char LOW_CHAR = '\0';
