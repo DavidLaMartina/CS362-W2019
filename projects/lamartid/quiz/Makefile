@@ -3,6 +3,7 @@ BINARIES = testme
 
 default:
 	gcc -o testme testme.c $(CFLAGS)
+	./testme
 
 clean:
 	rm -f *.o *.exe $(BINARIES) *.gcov *.gcda *.gcno

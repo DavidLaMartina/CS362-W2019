@@ -7,20 +7,22 @@ char inputChar()
 {
     // Random selection of 'actual' characters, from SPACE to ~
 
+    /*
     char space = ' ';
     int last_ascii = 127;
     int range = last_ascii - space;
     return ' ' + (rand() % range);
+    */
 
     // Random selection of one of the 9 characters required to progress the
     // state from 0 to 9
-    /*
+
     char possible_chars[] = {
     '[','(','{',' ','a','x','}',')',']'};
     int size = 9;
     int idx = rand() % size;
     return possible_chars[idx];
-    */
+    
 }
 
 char *inputString()
@@ -78,17 +80,11 @@ void testme()
        && s[4] == 't' && s[5] == '\0'       // s[5] == '\0' will always be satisfied
        && state == 9)                       // if the string is 5 'actual' characters
     {
-      //free(s);
       printf("error \n");
-      //exit(200);
-      return;
-    }
-    else{
-        //free(s);
+      exit(200);
     }
   }
 }
-
 
 int main(int argc, char *argv[])
 {
