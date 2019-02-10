@@ -4,12 +4,13 @@
 *
 * Council Room should:
 *   Allow current player to draw 4 cards
+*   Allow every otherplayer to draw 1 card
 *   Increase current player's number of buys by 1
 *
 * Consider
 *   Exactly 4 cards drawn for active player
 *   Increase active player's buy count by 1
-*   No other state changes for current player or game at large
+*   No other state changes for current player or game
 *   Each other player draws 1 card
 *   No other changes to other players' game states
 *   No change to victory or kingdom card supplies

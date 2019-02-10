@@ -37,7 +37,7 @@ int main(int argc, char *argv[]){
     int shuffledCards = 0;
     int extraActions = 2;
     int extraBuys = 0;
-    int cardsPlayed = 0;
+    int cardsPlayed = 1;
     int handPos = 0, choice1 = 0, choice2 = 0, choice3 = 0, bonus = 0;
     int seed = 1000;
     int numPlayers = 2;
