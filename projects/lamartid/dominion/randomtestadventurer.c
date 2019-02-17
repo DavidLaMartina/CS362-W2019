@@ -30,7 +30,7 @@
 #include <stdbool.h>
 
 #define TESTCARD "Adventurer"
-#define NUM_TESTS 500
+#define NUM_TESTS 10
 #define MIN_TREASURE 2
 #define MAX_TREASURE 10
 #define MIN_DECK_COUNT 10
@@ -55,11 +55,12 @@ int main(int argc, char *argv[]){
   int drawnTreasure = 0;
   int z = 0;
   int temphand[MAX_HAND];
+  int bonus = 0;
 
   // Variables to track for assertions
   int otherPlayer;
-  int treasureType;
   int treasureInDeck;
+  int adventurer_position;
   int discarded = 1;      // At least the 1 Adventurer card will be discarded
   int shuffledCards = 0;  // No shuffle required; at least 2 treasures in deck
 
@@ -76,25 +77,25 @@ int main(int argc, char *argv[]){
     }else{
       otherPlayer = 0;
     }
-    // Randomize type of treasure
-    treasureType = randomRange(copper, gold);
     // Randomize number of treasure
     treasureInDeck = randomRange(MIN_TREASURE, MAX_TREASURE);
-    // Randomize deck and deck count
+    // Randomize deck count
     G.deckCount[currentPlayer] = randomRange(MIN_DECK_COUNT, MAX_DECK_COUNT);
-    
-
-    // Randomize number of treasure
-
-
-    // Randomize hand and hand count
-
-
+    // Randomize a deck with given number of tresaur
+    randomTreasureDeck(G.deck[currentPlayer], G.deckCount[currentPlayer],
+                       treasureInDeck);
+    // Randomize hand count
+    G.handCount[currentPlayer] = randomRange(MIN_HAND_COUNT, MAX_HAND_COUNT);
+    // Randomize hand
+    randomCards(G.hand[currentPlayer], G.handCount[currentPlayer]);
     // Randomize hand position of Adventurer card (and place it there)
-
+    adventurer_position = randomRange(0, G.handCount[currentPlayer] - 1);
+    G.hand[currentPlayer][adventurer_position] = adventurer;
 
     // Save game state before testing
     memcpy(&testG, &G, sizeof(struct gameState));
+
+    adventurer_play(currentPlayer, drawnTreasure, z, temphand, &testG, adventurer_position, &bonus);
   }
   return 0;
 }

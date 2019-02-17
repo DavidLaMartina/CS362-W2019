@@ -119,8 +119,8 @@ void consecutiveDeck(int deck[], int deck_size){
         }
     }
 }
-void randomDeck(int deck[], int deck_size){
-    // Calls randomCard to populate a "deck" (array) of random cards
+void randomCards(int deck[], int deck_size){
+    // Calls randomCard to populate an array of random cards
     for (int i = 0; i < deck_size; i++){
         deck[i] = randomCard();
     }
@@ -179,6 +179,24 @@ void randomDeckSelect(int *deck, int deck_size, int card, int card_num){
     }
     genericShuffle(deck, deck_size);
 }
+void randomTreasureDeck(int *deck, int deck_size, int num_treasure){
+  // Populates card array with specific number of treasure cards, along with
+  // randomized selection of other cards that CANNOT be treasure
+  if (deck_size < num_treasure){
+    return;
+  }
+  int i;
+  for (i = 0; i < num_treasure; i++){
+    deck[i] = randomRange(copper, gold);
+  }
+  for (; i < deck_size; i++){
+    deck[i] = randomCard();
+    while (deck[i] == copper || deck[i] == silver || deck[i] == gold){
+      deck[i] = pickAnotherCard(deck[i]);
+    }
+  }
+  genericShuffle(deck, deck_size);
+}
 int countTreasure(int *cards, int size){
     // Counts the number of treasure cards within a card array
     int treasure_count = 0;
@@ -188,4 +206,24 @@ int countTreasure(int *cards, int size){
         }
     }
     return treasure_count;
+}
+int cardsToTreasure(int *cards, int size, int treasure_needed){
+  // Returns the number of total cards to draw num_treasure treasure, including
+  // those treasure. Starts at the "top" of the deck (end of the array)
+  if (treasure_needed > size || treasure_needed > countTreasure(cards, size)){
+    return 0;
+  }
+  int found_treasure = 0;
+  int total_cards = 0;
+  int current = size - 1;
+  while (found_treasure < treasure_needed && current >= 0){
+    total_cards++;
+    if (cards[current] == copper ||
+        cards[current] == silver ||
+        cards[current] == gold){
+      found_treasure++;
+    }
+    current--;
+  }
+  return total_cards;
 }

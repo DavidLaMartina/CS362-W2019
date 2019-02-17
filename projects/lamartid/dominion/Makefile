@@ -1,4 +1,5 @@
 CFLAGS= -Wall -fpic -coverage -lm -std=c99
+GFLAGS = -Wall -fpic -coverage -lm -std=c99
 
 rngs.o: rngs.h rngs.c
 	gcc -c rngs.c -g  $(CFLAGS)
@@ -35,12 +36,18 @@ randomtestcard1.out:
 
 randomtestcard2.out:
 
-randomtestadventurer.out:
+randomtestadventurer.out: test_helpers.c dominion.c rngs.c
+	echo "Random test results for adventurer" > randomtestadventurer.out
+	gcc -o randomtestadventurer randomtestadventurer.c test_helpers.c dominion.c rngs.c $(GFLAGS)
+	./randomtestadventurer >> randomtestadventurer.out
+	./run_gcov.sh adventurer_play >> randomtestadventurer.out
 
 player: player.c interface.o
 	gcc -o player player.c -g  dominion.o rngs.o interface.o $(CFLAGS)
 
 all: playdom player
 
+binaries=randomtestadventurer
+
 clean:
-	rm -f *.o playdom.exe playdom player player.exe  *.gcov *.gcda *.gcno *.so *.out testDrawCard testDrawCard.exe
+	rm -f *.o *.exe $(binaries) playdom.exe playdom player player.exe  *.gcov *.gcda *.gcno *.so *.out testDrawCard testDrawCard.exe
