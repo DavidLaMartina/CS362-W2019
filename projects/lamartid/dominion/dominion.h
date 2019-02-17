@@ -49,7 +49,9 @@ enum CARD
    outpost,
    salvager, /* choice1 = hand# to trash */
    sea_hag,
-   treasure_map
+   treasure_map,
+
+   num_cards // acts as counter variable
   };
 
 struct gameState {
