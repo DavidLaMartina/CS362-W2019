@@ -49,20 +49,14 @@ int main(int argc, char *argv[]){
   int k[10] = {adventurer, embargo, village, minion, mine,
                cutpurse, sea_hag, tribute, smithy, council_room};
 
-
-
-
   for (int i = 0; i < NUM_TESTS; i++){
     // Establish dependencies
     int currentPlayer;
-    int handPos;
     struct gameState G, testG;  // Before and after game states
 
     // Non-dependent parameters
     int choice1 = 0, choice2 = 0, choice3 = 0, bonus = 0;
     int drawnTreasure = 0;
-    int z = 0;
-    int temphand[MAX_HAND];
     int treasure_needed = 2;  // What adventurer requires of deck
     int extraBuys = 0;
     int extraActions = 0;
@@ -78,8 +72,25 @@ int main(int argc, char *argv[]){
     int num_treasure_actual, num_treasure_expected;
 
     // Specific test success / failure counters
-
-
+    int hand_count_current_errors; struct ValPair hand_count_current[NUM_TESTS];
+    int deck_count_current_errors; struct ValPair deck_count_current[NUM_TESTS];
+    int discard_count_current_errors; struct ValPair discard_count_current[NUM_TESTS];
+    int treasure_in_hand_current_errors; struct ValPair treasure_in_hand_current[NUM_TESTS];
+    int treasure_in_deck_current_errors; struct ValPair treasure_in_deck_current[NUM_TESTS];
+    int hand_count_other_errors; struct ValPair hand_count_other[NUM_TESTS];
+    int deck_count_other_errors; struct ValPair deck_count_other[NUM_TESTS];
+    int discard_count_other_errors; struct ValPair discard_count_other[NUM_TESTS];
+    int treasure_in_hand_other_errors; struct ValPair treasure_in_hand_other[NUM_TESTS];
+    int treasure_in_deck_other_errors; struct ValPair treasure_in_deck_other[NUM_TESTS];
+    int num_buys_diff_errors; struct ValPair num_buys_diff[NUM_TESTS];
+    int same_supply_errors;
+    int same_tokens_errors;
+    int outpost_play_errors; struct ValPair outpost_play_diff[NUM_TESTS];
+    int outpost_turn_errors; struct ValPair outpost_turn_diff[NUM_TESTS];
+    int whose_turn_errors; struct ValPair whose_turn_diff[NUM_TESTS];
+    int phase_errors; struct ValPair phase_diff[NUM_TESTS];
+    int num_action_errors; struct ValPair num_action_diff[NUM_TESTS];
+    int played_card_errors; struct ValPair played_card_diff[NUM_TESTS];
 
     // Start new game for every test
     initializeGame(numPlayers, k, seed, &G);
@@ -91,33 +102,20 @@ int main(int argc, char *argv[]){
     }else{
       otherPlayer = 0;
     }
-    // Randomize number of treasure
-    treasureInDeck = randomRange(MIN_TREASURE, MAX_TREASURE);
-    // Randomize deck count
-    G.deckCount[currentPlayer] = randomRange(MIN_DECK_COUNT, MAX_DECK_COUNT);
-    // Randomize a deck with given number of treasure
-    randomTreasureDeck(G.deck[currentPlayer], G.deckCount[currentPlayer],
-                       treasureInDeck);
-    // Determine number of total cards to be drawn to reach 2 treasure
-    draw_total = cardsToTreasure(G.deck[currentPlayer], G.deckCount[currentPlayer], treasure_needed);
-    // Determine number of total cards that should be discarded (Adventurer + non-treasure cards drawn)
-    discarded += (draw_total - treasure_needed);
-    // Randomize hand count
-    G.handCount[currentPlayer] = randomRange(MIN_HAND_COUNT, MAX_HAND_COUNT);
-    // Randomize hand
-    randomCards(G.hand[currentPlayer], G.handCount[currentPlayer]);
-    // Randomize hand position of Adventurer card (and place it there)
-    adventurer_position = randomRange(0, G.handCount[currentPlayer] - 1);
+    G.whoseTurn = currentPlayer;  // Set turn
+    treasureInDeck = randomRange(MIN_TREASURE, MAX_TREASURE); // Randomize number of treasure
+    G.deckCount[currentPlayer] = randomRange(MIN_DECK_COUNT, MAX_DECK_COUNT); // Randomize deck count
+    randomTreasureDeck(G.deck[currentPlayer], G.deckCount[currentPlayer], treasureInDeck); // Randomize a deck with given number of treasure
+    draw_total = cardsToTreasure(G.deck[currentPlayer], G.deckCount[currentPlayer], treasure_needed); // Determine number of total cards to be drawn to reach 2 treasure
+    discarded += (draw_total - treasure_needed); // Determine number of total cards that should be discarded (Adventurer + non-treasure cards drawn)
+    G.handCount[currentPlayer] = randomRange(MIN_HAND_COUNT, MAX_HAND_COUNT); // Randomize hand count
+    randomCards(G.hand[currentPlayer], G.handCount[currentPlayer]); // Randomize hand
+    adventurer_position = randomRange(0, G.handCount[currentPlayer] - 1); // Randomize hand position of Adventurer card (and place it there)
     G.hand[currentPlayer][adventurer_position] = adventurer;
 
-    // Save game state before testing
+    // Save game state  & execute via cardEffect
     memcpy(&testG, &G, sizeof(struct gameState));
-
-    // Execute adventurer via cardEffect
     cardEffect(adventurer, choice1, choice2, choice3, &testG, adventurer_position, &bonus);
-    //adventurer_play(currentPlayer, drawnTreasure, z, temphand, &testG, adventurer_position, &bonus);
-
-    printf("draw_total: %d, discarded: %d\n", draw_total, discarded);
 
     printf("Testing state changes for active player...\n");
      printf("Hand count = %d, expected = %d", testG.handCount[currentPlayer], G.handCount[currentPlayer] + draw_total - discarded);
@@ -132,7 +130,7 @@ int main(int argc, char *argv[]){
      assertTrue(num_treasure_actual == num_treasure_expected);
      num_treasure_actual = countTreasure(testG.deck[currentPlayer], testG.deckCount[currentPlayer]);
      num_treasure_expected = countTreasure(G.deck[currentPlayer], G.deckCount[currentPlayer]) - drawnTreasure;
-     printf("Treasure cards in deck = %d, expected = %d", num_treasure_expected, num_treasure_expected);
+     printf("Treasure cards in deck = %d, expected = %d", num_treasure_actual, num_treasure_expected);
      assertTrue(num_treasure_actual == num_treasure_expected);
 
 

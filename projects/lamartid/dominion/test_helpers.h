@@ -8,6 +8,11 @@
 #include <stdarg.h>
 #include <string.h>
 
+struct ValPair{
+  int actual;
+  int expected;
+};
+
 void assertTrue(bool expression);
 int randomRange(int low, int high);
 int num_compare(const void* a, const void* b);
