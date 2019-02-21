@@ -33,7 +33,7 @@
 #define SEPARATE separate('*', 80)
 #define SPACE printf("\n")
 
-#define NUM_TESTS 500
+#define NUM_TESTS 100
 #define MIN_TREASURE 2
 #define MAX_TREASURE 10
 #define MIN_DECK_COUNT 10
@@ -48,6 +48,27 @@ int main(int argc, char *argv[]){
   int numPlayers = 2;         // Test one player or the other
   int k[10] = {adventurer, embargo, village, minion, mine,
                cutpurse, sea_hag, tribute, smithy, council_room};
+
+  // Specific test success / failure counters
+  int hand_count_current_errors = 0; struct ValPair hand_count_current[NUM_TESTS];
+  int deck_count_current_errors = 0; struct ValPair deck_count_current[NUM_TESTS];
+  int discard_count_current_errors = 0; struct ValPair discard_count_current[NUM_TESTS];
+  int treasure_in_hand_current_errors = 0; struct ValPair treasure_in_hand_current[NUM_TESTS];
+  int treasure_in_deck_current_errors = 0; struct ValPair treasure_in_deck_current[NUM_TESTS];
+  int hand_count_other_errors = 0; struct ValPair hand_count_other[NUM_TESTS];
+  int deck_count_other_errors = 0; struct ValPair deck_count_other[NUM_TESTS];
+  int discard_count_other_errors = 0; struct ValPair discard_count_other[NUM_TESTS];
+  int treasure_in_hand_other_errors = 0; struct ValPair treasure_in_hand_other[NUM_TESTS];
+  int treasure_in_deck_other_errors = 0; struct ValPair treasure_in_deck_other[NUM_TESTS];
+  int num_buys_diff_errors = 0; struct ValPair num_buys_diff[NUM_TESTS];
+  int same_supply_errors = 0;
+  int same_tokens_errors = 0;
+  int outpost_play_errors = 0; struct ValPair outpost_play_diff[NUM_TESTS];
+  int outpost_turn_errors = 0; struct ValPair outpost_turn_diff[NUM_TESTS];
+  int whose_turn_errors = 0; struct ValPair whose_turn_diff[NUM_TESTS];
+  int phase_errors = 0; struct ValPair phase_diff[NUM_TESTS];
+  int num_action_errors = 0; struct ValPair num_action_diff[NUM_TESTS];
+  int played_card_errors = 0; struct ValPair played_card_diff[NUM_TESTS];
 
   for (int i = 0; i < NUM_TESTS; i++){
     // Establish dependencies
@@ -67,30 +88,9 @@ int main(int argc, char *argv[]){
     int treasureInDeck;
     int adventurer_position;
     int discarded = 1;      // At least the 1 Adventurer card will be discarded
-    int shuffledCards = 0;  // No shuffle required; at least 2 treasures in deck
+    //int shuffledCards = 0;  // No shuffle required; at least 2 treasures in deck
     int draw_total;         // Number of cards must be drawn to get 2 treasure
     int num_treasure_actual, num_treasure_expected;
-
-    // Specific test success / failure counters
-    int hand_count_current_errors; struct ValPair hand_count_current[NUM_TESTS];
-    int deck_count_current_errors; struct ValPair deck_count_current[NUM_TESTS];
-    int discard_count_current_errors; struct ValPair discard_count_current[NUM_TESTS];
-    int treasure_in_hand_current_errors; struct ValPair treasure_in_hand_current[NUM_TESTS];
-    int treasure_in_deck_current_errors; struct ValPair treasure_in_deck_current[NUM_TESTS];
-    int hand_count_other_errors; struct ValPair hand_count_other[NUM_TESTS];
-    int deck_count_other_errors; struct ValPair deck_count_other[NUM_TESTS];
-    int discard_count_other_errors; struct ValPair discard_count_other[NUM_TESTS];
-    int treasure_in_hand_other_errors; struct ValPair treasure_in_hand_other[NUM_TESTS];
-    int treasure_in_deck_other_errors; struct ValPair treasure_in_deck_other[NUM_TESTS];
-    int num_buys_diff_errors; struct ValPair num_buys_diff[NUM_TESTS];
-    int same_supply_errors;
-    int same_tokens_errors;
-    int outpost_play_errors; struct ValPair outpost_play_diff[NUM_TESTS];
-    int outpost_turn_errors; struct ValPair outpost_turn_diff[NUM_TESTS];
-    int whose_turn_errors; struct ValPair whose_turn_diff[NUM_TESTS];
-    int phase_errors; struct ValPair phase_diff[NUM_TESTS];
-    int num_action_errors; struct ValPair num_action_diff[NUM_TESTS];
-    int played_card_errors; struct ValPair played_card_diff[NUM_TESTS];
 
     // Start new game for every test
     initializeGame(numPlayers, k, seed, &G);
@@ -117,75 +117,73 @@ int main(int argc, char *argv[]){
     memcpy(&testG, &G, sizeof(struct gameState));
     cardEffect(adventurer, choice1, choice2, choice3, &testG, adventurer_position, &bonus);
 
-    printf("Testing state changes for active player...\n");
-     printf("Hand count = %d, expected = %d", testG.handCount[currentPlayer], G.handCount[currentPlayer] + draw_total - discarded);
-     assertTrue(testG.handCount[currentPlayer] == G.handCount[currentPlayer] + draw_total - discarded);
-     printf("Deck count = %d, expected = %d", testG.deckCount[currentPlayer], G.deckCount[currentPlayer] - draw_total + shuffledCards);
-     assertTrue(testG.deckCount[currentPlayer] == G.deckCount[currentPlayer] - draw_total);
-     printf("Discard count = %d, expected = %d", testG.discardCount[currentPlayer], G.discardCount[currentPlayer] + discarded);
-     assertTrue(testG.discardCount[currentPlayer] == G.discardCount[currentPlayer] + discarded);
-     num_treasure_actual = countTreasure(testG.hand[currentPlayer], testG.handCount[currentPlayer]);
-     num_treasure_expected = countTreasure(G.hand[currentPlayer], G.handCount[currentPlayer]) + drawnTreasure;
-     printf("Treasure cards in hand = %d, expected = %d", num_treasure_actual, num_treasure_expected);
-     assertTrue(num_treasure_actual == num_treasure_expected);
-     num_treasure_actual = countTreasure(testG.deck[currentPlayer], testG.deckCount[currentPlayer]);
-     num_treasure_expected = countTreasure(G.deck[currentPlayer], G.deckCount[currentPlayer]) - drawnTreasure;
-     printf("Treasure cards in deck = %d, expected = %d", num_treasure_actual, num_treasure_expected);
-     assertTrue(num_treasure_actual == num_treasure_expected);
+    // Active player tests
+    assertEqualValPair(testG.handCount[currentPlayer], G.handCount[currentPlayer] + draw_total - discarded, hand_count_current, &hand_count_current_errors);
+    assertEqualValPair(testG.deckCount[currentPlayer], G.deckCount[currentPlayer] - draw_total, deck_count_current, &deck_count_current_errors);
+    assertEqualValPair(testG.discardCount[currentPlayer], G.discardCount[currentPlayer] + discarded, discard_count_current, &discard_count_current_errors);
+    num_treasure_actual = countTreasure(testG.hand[currentPlayer], testG.handCount[currentPlayer]);
+    num_treasure_expected = countTreasure(G.hand[currentPlayer], G.handCount[currentPlayer]) + drawnTreasure;
+    assertEqualValPair(num_treasure_actual, num_treasure_expected, treasure_in_hand_current, &treasure_in_hand_current_errors);
+    num_treasure_actual = countTreasure(testG.deck[currentPlayer], testG.deckCount[currentPlayer]);
+    num_treasure_expected = countTreasure(G.deck[currentPlayer], G.deckCount[currentPlayer]) - drawnTreasure;
+    assertEqualValPair(num_treasure_actual, num_treasure_expected, treasure_in_deck_current, &treasure_in_deck_current_errors);
 
+    // Inactive player tests
+    assertEqualValPair(testG.handCount[otherPlayer], G.handCount[otherPlayer], hand_count_other, &hand_count_other_errors);
+    assertEqualValPair(testG.deckCount[otherPlayer], G.deckCount[otherPlayer], deck_count_other, &deck_count_other_errors);
+    assertEqualValPair(testG.discardCount[otherPlayer], G.discardCount[otherPlayer], discard_count_other, &discard_count_other_errors);
+    num_treasure_actual = countTreasure(testG.hand[otherPlayer], testG.handCount[otherPlayer]);
+    num_treasure_expected = countTreasure(G.hand[otherPlayer], G.handCount[otherPlayer]);
+    assertEqualValPair(num_treasure_actual, num_treasure_expected, treasure_in_hand_other, &treasure_in_hand_other_errors);
+    num_treasure_actual = countTreasure(testG.deck[otherPlayer], testG.deckCount[otherPlayer]);
+    num_treasure_expected = countTreasure(G.deck[otherPlayer], G.deckCount[otherPlayer]);
+    assertEqualValPair(num_treasure_actual, num_treasure_expected, treasure_in_deck_other, &treasure_in_deck_other_errors);
 
-     printf("Testing state changes for other player...\n");
-     printf("Hand count = %d, expected = %d", testG.handCount[otherPlayer], G.handCount[otherPlayer]);
-     assertTrue(testG.handCount[otherPlayer] == G.handCount[otherPlayer]);
-     printf("Deck count = %d, expected = %d", testG.deckCount[otherPlayer], G.deckCount[otherPlayer]);
-     assertTrue(testG.deckCount[otherPlayer] == G.deckCount[otherPlayer]);
-     printf("Discard count = %d, expected = %d", testG.discardCount[otherPlayer], G.discardCount[otherPlayer]);
-     assertTrue(testG.discardCount[otherPlayer] == G.discardCount[otherPlayer]);
-     num_treasure_actual = countTreasure(testG.hand[otherPlayer], testG.handCount[otherPlayer]);
-     num_treasure_expected = countTreasure(G.hand[otherPlayer], G.handCount[otherPlayer]);
-     printf("Treasure cards in hand = %d, expected = %d", num_treasure_actual, num_treasure_expected);
-     assertTrue(num_treasure_actual == num_treasure_expected);
-     num_treasure_actual = countTreasure(testG.deck[otherPlayer], testG.deckCount[otherPlayer]);
-     num_treasure_expected = countTreasure(G.deck[otherPlayer], G.deckCount[otherPlayer]);
-     printf("Treasure cards in deck = %d, expected = %d", num_treasure_expected, num_treasure_expected);
-     assertTrue(num_treasure_actual == num_treasure_expected);
-
-     printf("Testing overall game state changes...\n");
-     printf("Number of buys remaining = %d, expected = %d", testG.numBuys, G.numBuys + extraBuys);
-     assertTrue(testG.numBuys == G.numBuys + extraBuys);
-     printf("Testing state changes on victory card and kingdom card piles...\n");
-     printf("Each card's supply must have remained the same in order to pass.\n");
-     bool same_supply = true;
-     for (int i = 0; i < num_cards; i++){
-         if (testG.supplyCount[i] != G.supplyCount[i]){
-             same_supply = false;
-         }
-     }
-     printf("All counts identical");
-     assertTrue(same_supply);
-     printf("Testing changes on embargo tokens...\n");
-     bool same_tokens = true;
-     for (int i = 0; i < num_cards; i++){
-         if (testG.embargoTokens[i] != G.embargoTokens[i]){
-             same_supply = false;
-         }
-     }
-     printf("All tokens identical");
-     assertTrue(same_tokens);
-     printf("Outpost played = %d, expected = %d", testG.outpostPlayed, G.outpostPlayed);
-     assertTrue(testG.outpostPlayed == G.outpostPlayed);
-     printf("Outpost turn = %d, expected = %d", testG.outpostTurn, G.outpostTurn);
-     assertTrue(testG.outpostTurn == G.outpostTurn);
-     printf("Whose turn = %d, expected = %d", testG.whoseTurn, G.whoseTurn);
-     assertTrue(testG.whoseTurn == G.whoseTurn);
-     printf("Phase = %d, expected = %d", testG.phase, G.phase);
-     assertTrue(testG.phase == G.phase);
-     printf("Number of actions = %d, expected = %d", testG.numActions, G.numActions + extraActions);
-     assertTrue(testG.numActions == G.numActions + extraActions);
-     printf("Played cards count = %d, expected = %d", testG.playedCardCount, G.playedCardCount + cardsPlayed);
-     assertTrue(testG.playedCardCount == G.playedCardCount + cardsPlayed);
-
-     SPACE;
+    // Overall game state changes
+    assertEqualValPair(testG.numBuys, G.numBuys + extraBuys, num_buys_diff, &num_buys_diff_errors);
+    bool same_supply = true;
+    for (int i = 0; i < num_cards; i++){
+       if (testG.supplyCount[i] != G.supplyCount[i]){
+           same_supply = false;
+       }
+    }
+    if (!same_supply){
+      same_supply_errors++;
+    }
+    bool same_tokens = true;
+    for (int i = 0; i < num_cards; i++){
+       if (testG.embargoTokens[i] != G.embargoTokens[i]){
+           same_supply = false;
+       }
+    }
+    if (!same_tokens){
+      same_tokens_errors++;
+    }
+    assertEqualValPair(testG.outpostPlayed, G.outpostPlayed, outpost_play_diff, &outpost_play_errors);
+    assertEqualValPair(testG.outpostTurn, G.outpostTurn, outpost_turn_diff, &outpost_turn_errors);
+    assertEqualValPair(testG.whoseTurn, G.whoseTurn, whose_turn_diff, &whose_turn_errors);
+    assertEqualValPair(testG.phase, G.phase, phase_diff, &phase_errors);
+    assertEqualValPair(testG.numActions, G.numActions + extraActions, num_action_diff, &num_action_errors);
+    assertEqualValPair(testG.playedCardCount, G.playedCardCount + cardsPlayed, played_card_diff, &played_card_errors);
   }
+  printValPairResults(hand_count_current, hand_count_current_errors, "Hand count errors - current player");
+  printValPairResults(deck_count_current, deck_count_current_errors, "Deck count errors - current player");
+  printValPairResults(discard_count_current, discard_count_current_errors, "Discard count errors - current player");
+  printValPairResults(treasure_in_hand_current, treasure_in_hand_current_errors, "Treasure in hand errors - current player");
+  printValPairResults(treasure_in_deck_current, treasure_in_deck_current_errors, "Treasure in deck errors - current player");
+  printValPairResults(hand_count_other, hand_count_other_errors, "Hand count errors - other player");
+  printValPairResults(deck_count_other, deck_count_other_errors, "Deck count errors - other player");
+  printValPairResults(discard_count_other, discard_count_other_errors, "Discard count errors - other player");
+  printValPairResults(treasure_in_hand_other, treasure_in_hand_other_errors, "Treasure in hand errors - other player");
+  printValPairResults(treasure_in_deck_other, treasure_in_deck_other_errors, "Treasure in deck errors - other player");
+  printValPairResults(num_buys_diff, num_buys_diff_errors, "Number of buys remaining errors");
+  printf("Supply errors - %d\n\n", same_supply_errors);
+  printf("Tokens errors - %d\n\n", same_tokens_errors);
+  printValPairResults(outpost_play_diff, outpost_play_errors, "Outposts played errors");
+  printValPairResults(outpost_turn_diff, outpost_turn_errors, "Outpost turn errors");
+  printValPairResults(whose_turn_diff, whose_turn_errors, "Whose turn errors: ");
+  printValPairResults(phase_diff, phase_errors, "Phase errors: ");
+  printValPairResults(num_action_diff, num_action_errors, "Number of actions remaining errors");
+  printValPairResults(played_card_diff, played_card_errors, "Played cards errors");
   return 0;
 }

@@ -20,6 +20,24 @@ void assertTrue(bool expression){
       printf("...TEST FAILED\n");
   }
 }
+void assertEqualValPair(int actual, int expected, struct ValPair *err_arr, int *counter){
+  // Compares two values and updates the error array and error array counter as needed
+  if (!(actual == expected)){
+    err_arr[*counter].actual = actual;
+    err_arr[*counter].expected = expected;
+    (*counter)++;
+  }
+}
+void printValPairArr(struct ValPair *arr, int size){
+  for (int i = 0; i < size; i++){
+    printf("Actual: %d, Expected: %d\n", arr[i].actual, arr[i].expected);
+  }
+}
+void printValPairResults(struct ValPair *arr, int size, char *message){
+  printf("%s - %d\n", message, size);
+  printValPairArr(arr, size);
+  printf("\n");
+}
 int randomRange(int low, int high){
   // return a value within a specified range, inclusive
   return rand() % (high + 1 - low) + low;

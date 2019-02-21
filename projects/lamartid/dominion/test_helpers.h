@@ -14,6 +14,9 @@ struct ValPair{
 };
 
 void assertTrue(bool expression);
+void assertEqualValPair(int actual, int expected, struct ValPair *err_arr, int *counter);
+void printValPairArr(struct ValPair *arr, int size);
+void printValPairResults(struct ValPair *arr, int size, char *message);
 int randomRange(int low, int high);
 int num_compare(const void* a, const void* b);
 int* newSort(int arr[], int size);
