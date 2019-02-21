@@ -30,4 +30,6 @@ void steward_play(
 	int currentPlayer, struct gameState *state, int handPos,
 	int choice1, int choice2, int choice3);
 
+void village_play(int currentPlayer, struct gameState *state, int handPos);
+
 #endif

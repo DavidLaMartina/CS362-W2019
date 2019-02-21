@@ -32,12 +32,16 @@ runtests: testDrawCard
 
 randomtest: randomtestcard1.out randomtestcard2.out randomtestadventurer.out
 
-randomtestcard1.out:
+randomtestcard1.out: test_helpers.c dominion.c rngs.c
+	echo "Random test results for Village:" > randomtestcard1.out
+	gcc -o randomtestcard1 randomtestcard1.c test_helpers.c dominion.c rngs.c $(GFLAGS)
+	./randomtestcard1 >> randomtestcard1.out
+	./run_gcov.sh village_play >> randomtestcard1.out
 
 randomtestcard2.out:
 
 randomtestadventurer.out: test_helpers.c dominion.c rngs.c
-	echo "Random test results for adventurer" > randomtestadventurer.out
+	echo "Random test results for Adventurer:" > randomtestadventurer.out
 	gcc -o randomtestadventurer randomtestadventurer.c test_helpers.c dominion.c rngs.c $(GFLAGS)
 	./randomtestadventurer >> randomtestadventurer.out
 	./run_gcov.sh adventurer_play >> randomtestadventurer.out
