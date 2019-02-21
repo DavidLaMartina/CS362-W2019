@@ -7,11 +7,10 @@
 *   give player 2 more actions
 *   discard Village card after play
 *
-* Consider:
-*   Was exactly 1 card drawn?
-*   Were 2 actions added?
-*   Was the game state left unchanged for the other player?
-*   Was the Village card discarded (and added to discard pile)?
+* Randomize:
+*   currentPlayer
+*   numActions
+*   handPos
 *******************************************************************************/
 
 #include "dominion.h"
