@@ -113,34 +113,55 @@ int main(int argc, char *argv[]){
     adventurer_position = randomRange(0, G.handCount[currentPlayer] - 1); // Randomize hand position of Adventurer card (and place it there)
     G.hand[currentPlayer][adventurer_position] = adventurer;
 
+    // Establish dependencies for meaningful error output
+    struct DepSet dep;
+    dep.num_dep = 4;
+    dep.dep_names[0] = "deck count";
+    dep.dep_names[1] = "cards to treasure";
+    dep.dep_names[2] = "hand count";
+    dep.dep_names[3] = "hand position";
+    dep.dependencies[0] = G.deckCount[currentPlayer];
+    dep.dependencies[1] = draw_total;
+    dep.dependencies[2] = G.handCount[currentPlayer];
+    dep.dependencies[3] = adventurer_position;
+
+
+     //{G.deckCount[currentPlayer], draw_total, G.handCount[currentPlayer], adventurer_position};
+    //dep.dep_names = {"deck count", "cards to treasure", "hand count", "hand position"};
+    //dep.dependencies = {G.deckCount[currentPlayer], draw_total, G.handCount[currentPlayer], adventurer_position};
+    //int num_dep = 4;
+    //char* dep_names[] = {"deck count", "cards to treasure", "hand count", "hand position"};
+    //int dependencies[] = {G.deckCount[currentPlayer], draw_total, G.handCount[currentPlayer], adventurer_position};
+
+
     // Save game state  & execute via cardEffect
     memcpy(&testG, &G, sizeof(struct gameState));
     cardEffect(adventurer, choice1, choice2, choice3, &testG, adventurer_position, &bonus);
 
     // Active player tests
-    assertEqualValPair(testG.handCount[currentPlayer], G.handCount[currentPlayer] + draw_total - discarded, hand_count_current, &hand_count_current_errors);
-    assertEqualValPair(testG.deckCount[currentPlayer], G.deckCount[currentPlayer] - draw_total, deck_count_current, &deck_count_current_errors);
-    assertEqualValPair(testG.discardCount[currentPlayer], G.discardCount[currentPlayer] + discarded, discard_count_current, &discard_count_current_errors);
+    assertEqualValPair(testG.handCount[currentPlayer], G.handCount[currentPlayer] + draw_total - discarded, hand_count_current, &hand_count_current_errors, dep);
+    assertEqualValPair(testG.deckCount[currentPlayer], G.deckCount[currentPlayer] - draw_total, deck_count_current, &deck_count_current_errors, dep);
+    assertEqualValPair(testG.discardCount[currentPlayer], G.discardCount[currentPlayer] + discarded, discard_count_current, &discard_count_current_errors, dep);
     num_treasure_actual = countTreasure(testG.hand[currentPlayer], testG.handCount[currentPlayer]);
     num_treasure_expected = countTreasure(G.hand[currentPlayer], G.handCount[currentPlayer]) + drawnTreasure;
-    assertEqualValPair(num_treasure_actual, num_treasure_expected, treasure_in_hand_current, &treasure_in_hand_current_errors);
+    assertEqualValPair(num_treasure_actual, num_treasure_expected, treasure_in_hand_current, &treasure_in_hand_current_errors, dep);
     num_treasure_actual = countTreasure(testG.deck[currentPlayer], testG.deckCount[currentPlayer]);
     num_treasure_expected = countTreasure(G.deck[currentPlayer], G.deckCount[currentPlayer]) - drawnTreasure;
-    assertEqualValPair(num_treasure_actual, num_treasure_expected, treasure_in_deck_current, &treasure_in_deck_current_errors);
+    assertEqualValPair(num_treasure_actual, num_treasure_expected, treasure_in_deck_current, &treasure_in_deck_current_errors, dep);
 
     // Inactive player tests
-    assertEqualValPair(testG.handCount[otherPlayer], G.handCount[otherPlayer], hand_count_other, &hand_count_other_errors);
-    assertEqualValPair(testG.deckCount[otherPlayer], G.deckCount[otherPlayer], deck_count_other, &deck_count_other_errors);
-    assertEqualValPair(testG.discardCount[otherPlayer], G.discardCount[otherPlayer], discard_count_other, &discard_count_other_errors);
+    assertEqualValPair(testG.handCount[otherPlayer], G.handCount[otherPlayer], hand_count_other, &hand_count_other_errors, dep);
+    assertEqualValPair(testG.deckCount[otherPlayer], G.deckCount[otherPlayer], deck_count_other, &deck_count_other_errors, dep);
+    assertEqualValPair(testG.discardCount[otherPlayer], G.discardCount[otherPlayer], discard_count_other, &discard_count_other_errors, dep);
     num_treasure_actual = countTreasure(testG.hand[otherPlayer], testG.handCount[otherPlayer]);
     num_treasure_expected = countTreasure(G.hand[otherPlayer], G.handCount[otherPlayer]);
-    assertEqualValPair(num_treasure_actual, num_treasure_expected, treasure_in_hand_other, &treasure_in_hand_other_errors);
+    assertEqualValPair(num_treasure_actual, num_treasure_expected, treasure_in_hand_other, &treasure_in_hand_other_errors, dep);
     num_treasure_actual = countTreasure(testG.deck[otherPlayer], testG.deckCount[otherPlayer]);
     num_treasure_expected = countTreasure(G.deck[otherPlayer], G.deckCount[otherPlayer]);
-    assertEqualValPair(num_treasure_actual, num_treasure_expected, treasure_in_deck_other, &treasure_in_deck_other_errors);
+    assertEqualValPair(num_treasure_actual, num_treasure_expected, treasure_in_deck_other, &treasure_in_deck_other_errors, dep);
 
     // Overall game state changes
-    assertEqualValPair(testG.numBuys, G.numBuys + extraBuys, num_buys_diff, &num_buys_diff_errors);
+    assertEqualValPair(testG.numBuys, G.numBuys + extraBuys, num_buys_diff, &num_buys_diff_errors, dep);
     bool same_supply = true;
     for (int i = 0; i < num_cards; i++){
        if (testG.supplyCount[i] != G.supplyCount[i]){
@@ -159,12 +180,12 @@ int main(int argc, char *argv[]){
     if (!same_tokens){
       same_tokens_errors++;
     }
-    assertEqualValPair(testG.outpostPlayed, G.outpostPlayed, outpost_play_diff, &outpost_play_errors);
-    assertEqualValPair(testG.outpostTurn, G.outpostTurn, outpost_turn_diff, &outpost_turn_errors);
-    assertEqualValPair(testG.whoseTurn, G.whoseTurn, whose_turn_diff, &whose_turn_errors);
-    assertEqualValPair(testG.phase, G.phase, phase_diff, &phase_errors);
-    assertEqualValPair(testG.numActions, G.numActions + extraActions, num_action_diff, &num_action_errors);
-    assertEqualValPair(testG.playedCardCount, G.playedCardCount + cardsPlayed, played_card_diff, &played_card_errors);
+    assertEqualValPair(testG.outpostPlayed, G.outpostPlayed, outpost_play_diff, &outpost_play_errors, dep);
+    assertEqualValPair(testG.outpostTurn, G.outpostTurn, outpost_turn_diff, &outpost_turn_errors, dep);
+    assertEqualValPair(testG.whoseTurn, G.whoseTurn, whose_turn_diff, &whose_turn_errors, dep);
+    assertEqualValPair(testG.phase, G.phase, phase_diff, &phase_errors, dep);
+    assertEqualValPair(testG.numActions, G.numActions + extraActions, num_action_diff, &num_action_errors, dep);
+    assertEqualValPair(testG.playedCardCount, G.playedCardCount + cardsPlayed, played_card_diff, &played_card_errors, dep);
   }
   printValPairResults(hand_count_current, hand_count_current_errors, "Hand count errors - current player");
   printValPairResults(deck_count_current, deck_count_current_errors, "Deck count errors - current player");

@@ -8,13 +8,19 @@
 #include <stdarg.h>
 #include <string.h>
 
+struct DepSet{
+  int num_dep;
+  char* dep_names[4];
+  int dependencies[4];
+};
 struct ValPair{
   int actual;
   int expected;
+  struct DepSet dep;
 };
 
 void assertTrue(bool expression);
-void assertEqualValPair(int actual, int expected, struct ValPair *err_arr, int *counter);
+void assertEqualValPair(int actual, int expected, struct ValPair *err_arr, int *counter, struct DepSet dep);
 void printValPairArr(struct ValPair *arr, int size);
 void printValPairResults(struct ValPair *arr, int size, char *message);
 int randomRange(int low, int high);

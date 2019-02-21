@@ -20,17 +20,22 @@ void assertTrue(bool expression){
       printf("...TEST FAILED\n");
   }
 }
-void assertEqualValPair(int actual, int expected, struct ValPair *err_arr, int *counter){
+void assertEqualValPair(int actual, int expected, struct ValPair *err_arr, int *counter, struct DepSet dep){
   // Compares two values and updates the error array and error array counter as needed
   if (!(actual == expected)){
     err_arr[*counter].actual = actual;
     err_arr[*counter].expected = expected;
+    err_arr[*counter].dep = dep;
     (*counter)++;
   }
 }
 void printValPairArr(struct ValPair *arr, int size){
   for (int i = 0; i < size; i++){
-    printf("Actual: %d, Expected: %d\n", arr[i].actual, arr[i].expected);
+    printf("Actual: %d, Expected: %d...Dependencies:", arr[i].actual, arr[i].expected);
+    for (int j = 0; j < arr[i].dep.num_dep; j++){
+      printf(" %s: %d; ", arr[i].dep.dep_names[j], arr[i].dep.dependencies[j]);
+    }
+    printf("\n");
   }
 }
 void printValPairResults(struct ValPair *arr, int size, char *message){
