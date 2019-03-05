@@ -1,0 +1,54 @@
+Function "dominion.c 670" not defined.
+Breakpoint 1 at 0x7954: file dominion.c, line 674.
+Starting program: /home/dlamartina/School/CS362/CS362-W2019/projects/lamartid/nelsoryaDominion/cardtest1 
+
+Breakpoint 1, smithyEffect (handPos=0, currentPlayer=0, state=0x7fffffff7630) at dominion.c:674
+warning: Source file is more recent than executable.
+674	  for (i = 1; i < 3; i++) // changed i = 0 to i = 1
+676	    drawCard(currentPlayer, state);
+drawCard (player=0, state=0x7fffffff7630) at dominion.c:528
+528	  if (state->deckCount[player] <= 0){//Deck is empty
+0x7fffffff7630:	0x00000002
+0x7fffffff7634:	0x0000000a
+0x7fffffff7638:	0x00000008
+568	    int count = state->handCount[player];//Get current hand count for player
+574	    deckCounter = state->deckCount[player];//Create holder for the deck count
+575	    state->hand[player][count] = state->deck[player][deckCounter - 1];//Add card to the hand
+576	    state->deckCount[player]--;
+577	    state->handCount[player]++;//Increment hand count
+580	  return 0;
+581	}
+smithyEffect (handPos=0, currentPlayer=0, state=0x7fffffff7630) at dominion.c:674
+674	  for (i = 1; i < 3; i++) // changed i = 0 to i = 1
+676	    drawCard(currentPlayer, state);
+drawCard (player=0, state=0x7fffffff7630) at dominion.c:528
+528	  if (state->deckCount[player] <= 0){//Deck is empty
+568	    int count = state->handCount[player];//Get current hand count for player
+574	    deckCounter = state->deckCount[player];//Create holder for the deck count
+575	    state->hand[player][count] = state->deck[player][deckCounter - 1];//Add card to the hand
+576	    state->deckCount[player]--;
+577	    state->handCount[player]++;//Increment hand count
+580	  return 0;
+581	}
+smithyEffect (handPos=0, currentPlayer=0, state=0x7fffffff7630) at dominion.c:674
+674	  for (i = 1; i < 3; i++) // changed i = 0 to i = 1
+680	  discardCard(handPos, currentPlayer, state, 0);
+discardCard (handPos=0, currentPlayer=0, state=0x7fffffff7630, trashFlag=0) at dominion.c:1255
+1255	  if (trashFlag < 1)
+1258	      state->playedCards[state->playedCardCount] = state->hand[currentPlayer][handPos];
+1259	      state->playedCardCount++;
+1263	  state->hand[currentPlayer][handPos] = -1;
+1266	  if ( handPos == (state->handCount[currentPlayer] - 1) ) 	//last card in hand array is played
+1271	  else if ( state->handCount[currentPlayer] == 1 ) //only one card in hand
+1279	      state->hand[currentPlayer][handPos] = state->hand[currentPlayer][ (state->handCount[currentPlayer] - 1)];
+1281	      state->hand[currentPlayer][state->handCount[currentPlayer] - 1] = -1;
+1283	      state->handCount[currentPlayer]--;
+1286	  return 0;
+1287	}
+smithyEffect (handPos=0, currentPlayer=0, state=0x7fffffff7630) at dominion.c:681
+681	  return 0;
+682	}
+cardEffect (card=13, choice1=0, choice2=0, choice3=0, state=0x7fffffff7630, handPos=0, bonus=0x7fffffff0efc) at dominion.c:1249
+1249	}
+main (argc=1, argv=0x7fffffffdde8) at cardtest1.c:67
+67	    printf("Testing state changes for active player...\n");

@@ -1,0 +1,256 @@
+Breakpoint 1 at 0x79ac: file dominion.c, line 687.
+Starting program: /home/dlamartina/School/CS362/CS362-W2019/projects/lamartid/nelsoryaDominion/cardtest3 
+
+Breakpoint 1, villageEffect (handPos=0, currentPlayer=0, state=0x7fffffff7630) at dominion.c:687
+687	  drawCard(currentPlayer, state);
+drawCard (player=0, state=0x7fffffff7630) at dominion.c:528
+528	  if (state->deckCount[player] <= 0){//Deck is empty
+568	    int count = state->handCount[player];//Get current hand count for player
+574	    deckCounter = state->deckCount[player];//Create holder for the deck count
+575	    state->hand[player][count] = state->deck[player][deckCounter - 1];//Add card to the hand
+576	    state->deckCount[player]--;
+577	    state->handCount[player]++;//Increment hand count
+580	  return 0;
+581	}
+villageEffect (handPos=0, currentPlayer=0, state=0x7fffffff7630) at dominion.c:690
+690	  state->numActions = state->numActions + 1; // changed + 2 to + 1
+693	  discardCard(handPos, currentPlayer, state, 0);
+discardCard (handPos=0, currentPlayer=0, state=0x7fffffff7630, trashFlag=0) at dominion.c:1255
+1255	  if (trashFlag < 1)
+1258	      state->playedCards[state->playedCardCount] = state->hand[currentPlayer][handPos];
+1259	      state->playedCardCount++;
+1263	  state->hand[currentPlayer][handPos] = -1;
+0x7fffffff7630:	0x00000002
+1266	  if ( handPos == (state->handCount[currentPlayer] - 1) ) 	//last card in hand array is played
+1271	  else if ( state->handCount[currentPlayer] == 1 ) //only one card in hand
+1279	      state->hand[currentPlayer][handPos] = state->hand[currentPlayer][ (state->handCount[currentPlayer] - 1)];
+1281	      state->hand[currentPlayer][state->handCount[currentPlayer] - 1] = -1;
+1283	      state->handCount[currentPlayer]--;
+1286	  return 0;
+1287	}
+villageEffect (handPos=0, currentPlayer=0, state=0x7fffffff7630) at dominion.c:694
+694	  return 0;
+696	}
+cardEffect (card=14, choice1=0, choice2=0, choice3=0, state=0x7fffffff7630, handPos=0, bonus=0x7fffffff0efc) at dominion.c:1249
+1249	}
+main (argc=1, argv=0x7fffffffdde8) at cardtest3.c:62
+62	    printf("Testing state changes for active player...\n");
+__GI__IO_puts (str=0x555555562068 "Testing state changes for active player...") at ioputs.c:35
+35	ioputs.c: No such file or directory.
+Starting program: /home/dlamartina/School/CS362/CS362-W2019/projects/lamartid/nelsoryaDominion/randomtestadventurer 
+
+Program received signal SIGABRT, Aborted.
+__GI_raise (sig=sig@entry=6) at ../sysdeps/unix/sysv/linux/raise.c:50
+50	../sysdeps/unix/sysv/linux/raise.c: No such file or directory.
+#0  __GI_raise (sig=sig@entry=6) at ../sysdeps/unix/sysv/linux/raise.c:50
+#1  0x00007ffff7c61535 in __GI_abort () at abort.c:79
+#2  0x00007ffff7cc8516 in __libc_message (action=action@entry=do_abort, fmt=fmt@entry=0x7ffff7dec9ee "*** %s ***: %s terminated\n") at ../sysdeps/posix/libc_fatal.c:181
+#3  0x00007ffff7d6c431 in __GI___fortify_fail_abort (need_backtrace=need_backtrace@entry=false, msg=msg@entry=0x7ffff7dec9cc "stack smashing detected") at fortify_fail.c:33
+#4  0x00007ffff7d6c3f2 in __stack_chk_fail () at stack_chk_fail.c:29
+#5  0x000055555555edda in cardEffect (card=7, choice1=0, choice2=0, choice3=0, state=0x7fffffff7620, handPos=8, bonus=0x7ffffffd6590) at dominion.c:1249
+#6  0x0000000000000000 in ?? ()
+Stack level 0, frame at 0x7ffffffd59b0:
+ rip = 0x7ffff7c80077 in __GI_raise (../sysdeps/unix/sysv/linux/raise.c:50); saved rip = 0x7ffff7c61535
+ called by frame at 0x7ffffffd5ae0
+ source language c.
+ Arglist at 0x7ffffffd5888, args: sig=sig@entry=6
+ Locals at 0x7ffffffd5888, Previous frame's sp is 0x7ffffffd59b0
+ Saved registers:
+  rip at 0x7ffffffd59a8
+set = {__val = {0 <repeats 16 times>}}
+pid = <optimized out>
+tid = <optimized out>
+ret = <optimized out>
+sig = 6
+#4  0x00007ffff7d6c3f2 in __stack_chk_fail () at stack_chk_fail.c:29
+29	stack_chk_fail.c: No such file or directory.
+Stack level 4, frame at 0x7ffffffd5cb0:
+ rip = 0x7ffff7d6c3f2 in __stack_chk_fail (stack_chk_fail.c:29); saved rip = 0x55555555edda
+ called by frame at 0x7ffffffd6520, caller of frame at 0x7ffffffd5ca0
+ source language c.
+ Arglist at 0x7ffffffd5c98, args: 
+ Locals at 0x7ffffffd5c98, Previous frame's sp is 0x7ffffffd5cb0
+ Saved registers:
+  rip at 0x7ffffffd5ca8
+No locals.
+#6  0x0000000000000000 in ?? ()
+No symbol table info available.
+#5  0x000055555555edda in cardEffect (card=7, choice1=0, choice2=0, choice3=0, state=0x7fffffff7620, handPos=8, bonus=0x7ffffffd6590) at dominion.c:1249
+1249	}
+i = 0
+j = 1
+k = 0
+x = 10
+index = 10
+currentPlayer = 1
+nextPlayer = 0
+tributeRevealedCards = {-1, -1}
+temphand = {0 <repeats 15 times>, 13, 7, 11, 10, 20, 14, 17, 18, 3, 2, 0 <repeats 475 times>}
+drawntreasure = 0
+cardDrawn = 0
+z = 0
+#0  __GI_raise (sig=sig@entry=6) at ../sysdeps/unix/sysv/linux/raise.c:50
+#1  0x00007ffff7c61535 in __GI_abort () at abort.c:79
+#2  0x00007ffff7cc8516 in __libc_message (action=action@entry=do_abort, fmt=fmt@entry=0x7ffff7dec9ee "*** %s ***: %s terminated\n") at ../sysdeps/posix/libc_fatal.c:181
+#3  0x00007ffff7d6c431 in __GI___fortify_fail_abort (need_backtrace=need_backtrace@entry=false, msg=msg@entry=0x7ffff7dec9cc "stack smashing detected") at fortify_fail.c:33
+#4  0x00007ffff7d6c3f2 in __stack_chk_fail () at stack_chk_fail.c:29
+#5  0x000055555555edda in cardEffect (card=7, choice1=0, choice2=0, choice3=0, state=0x7fffffff7620, handPos=8, bonus=0x7ffffffd6590) at dominion.c:1249
+#6  0x0000000000000000 in ?? ()
+#4  0x00007ffff7d6c3f2 in __stack_chk_fail () at stack_chk_fail.c:29
+29	stack_chk_fail.c: No such file or directory.
+No locals.
+No arguments.
+#5  0x000055555555edda in cardEffect (card=7, choice1=0, choice2=0, choice3=0, state=0x7fffffff7620, handPos=8, bonus=0x7ffffffd6590) at dominion.c:1249
+1249	}
+i = 0
+j = 1
+k = 0
+x = 10
+index = 10
+currentPlayer = 1
+nextPlayer = 0
+tributeRevealedCards = {-1, -1}
+temphand = {0 <repeats 15 times>, 13, 7, 11, 10, 20, 14, 17, 18, 3, 2, 0 <repeats 475 times>}
+drawntreasure = 0
+cardDrawn = 0
+z = 0
+#1  0x00007ffff7c61535 in __GI_abort () at abort.c:79
+79	abort.c: No such file or directory.
+save_stage = 1
+act = {__sigaction_handler = {sa_handler = 0x0, sa_sigaction = 0x0}, sa_mask = {__val = {140737488304024, 0, 2, 0, 48, 2, 1, 140737488304024, 140737488304020, 2, 140737350477386, 0, 
+      93824992255226, 0, 140737488181984, 140737488182384}}, sa_flags = 4, sa_restorer = 0x1000}
+sigs = {__val = {32, 0 <repeats 15 times>}}
+No symbol "G" in current context.
+#0  __GI_raise (sig=sig@entry=6) at ../sysdeps/unix/sysv/linux/raise.c:50
+50	../sysdeps/unix/sysv/linux/raise.c: No such file or directory.
+Starting program: /home/dlamartina/School/CS362/CS362-W2019/projects/lamartid/nelsoryaDominion/randomtestadventurer 
+
+Program received signal SIGABRT, Aborted.
+__GI_raise (sig=sig@entry=6) at ../sysdeps/unix/sysv/linux/raise.c:50
+50	../sysdeps/unix/sysv/linux/raise.c: No such file or directory.
+#0  __GI_raise (sig=sig@entry=6) at ../sysdeps/unix/sysv/linux/raise.c:50
+#1  0x00007ffff7c61535 in __GI_abort () at abort.c:79
+#2  0x00007ffff7cc8516 in __libc_message (action=action@entry=do_abort, fmt=fmt@entry=0x7ffff7dec9ee "*** %s ***: %s terminated\n") at ../sysdeps/posix/libc_fatal.c:181
+#3  0x00007ffff7d6c431 in __GI___fortify_fail_abort (need_backtrace=need_backtrace@entry=false, msg=msg@entry=0x7ffff7dec9cc "stack smashing detected") at fortify_fail.c:33
+#4  0x00007ffff7d6c3f2 in __stack_chk_fail () at stack_chk_fail.c:29
+#5  0x000055555555edda in cardEffect (card=7, choice1=0, choice2=0, choice3=0, state=0x7fffffff7620, handPos=3, bonus=0x7ffffffd6590) at dominion.c:1249
+#6  0x0000000000000000 in ?? ()
+No symbol "z" in current context.
+#6  0x0000000000000000 in ?? ()
+No symbol table info available.
+#5  0x000055555555edda in cardEffect (card=7, choice1=0, choice2=0, choice3=0, state=0x7fffffff7620, handPos=3, bonus=0x7ffffffd6590) at dominion.c:1249
+1249	}
+i = 0
+j = 1
+k = 0
+x = 10
+index = 10
+currentPlayer = 1
+nextPlayer = 0
+tributeRevealedCards = {-1, -1}
+temphand = {0 <repeats 44 times>, 19, 24, 20, 7, 10, 1, 16, 0 <repeats 449 times>}
+drawntreasure = 0
+cardDrawn = 0
+z = 0
+$1 = 10
+$2 = 1
+#0  __GI_raise (sig=sig@entry=6) at ../sysdeps/unix/sysv/linux/raise.c:50
+#1  0x00007ffff7c61535 in __GI_abort () at abort.c:79
+#2  0x00007ffff7cc8516 in __libc_message (action=action@entry=do_abort, fmt=fmt@entry=0x7ffff7dec9ee "*** %s ***: %s terminated\n") at ../sysdeps/posix/libc_fatal.c:181
+#3  0x00007ffff7d6c431 in __GI___fortify_fail_abort (need_backtrace=need_backtrace@entry=false, msg=msg@entry=0x7ffff7dec9cc "stack smashing detected") at fortify_fail.c:33
+#4  0x00007ffff7d6c3f2 in __stack_chk_fail () at stack_chk_fail.c:29
+#5  0x000055555555edda in cardEffect (card=7, choice1=0, choice2=0, choice3=0, state=0x7fffffff7620, handPos=3, bonus=0x7ffffffd6590) at dominion.c:1249
+#6  0x0000000000000000 in ?? ()
+#0  __GI_raise (sig=sig@entry=6) at ../sysdeps/unix/sysv/linux/raise.c:50
+#1  0x00007ffff7c61535 in __GI_abort () at abort.c:79
+#2  0x00007ffff7cc8516 in __libc_message (action=action@entry=do_abort, fmt=fmt@entry=0x7ffff7dec9ee "*** %s ***: %s terminated\n") at ../sysdeps/posix/libc_fatal.c:181
+#3  0x00007ffff7d6c431 in __GI___fortify_fail_abort (need_backtrace=need_backtrace@entry=false, msg=msg@entry=0x7ffff7dec9cc "stack smashing detected") at fortify_fail.c:33
+#4  0x00007ffff7d6c3f2 in __stack_chk_fail () at stack_chk_fail.c:29
+#5  0x000055555555edda in cardEffect (card=7, choice1=0, choice2=0, choice3=0, state=0x7fffffff7620, handPos=3, bonus=0x7ffffffd6590) at dominion.c:1249
+#6  0x0000000000000000 in ?? ()
+An upper bound on the number of backtrace levels is unlimited.
+#0  __GI_raise (sig=sig@entry=6) at ../sysdeps/unix/sysv/linux/raise.c:50
+#1  0x00007ffff7c61535 in __GI_abort () at abort.c:79
+#2  0x00007ffff7cc8516 in __libc_message (action=action@entry=do_abort, fmt=fmt@entry=0x7ffff7dec9ee "*** %s ***: %s terminated\n") at ../sysdeps/posix/libc_fatal.c:181
+#3  0x00007ffff7d6c431 in __GI___fortify_fail_abort (need_backtrace=need_backtrace@entry=false, msg=msg@entry=0x7ffff7dec9cc "stack smashing detected") at fortify_fail.c:33
+#4  0x00007ffff7d6c3f2 in __stack_chk_fail () at stack_chk_fail.c:29
+#5  0x000055555555edda in cardEffect (card=7, choice1=0, choice2=0, choice3=0, state=0x7fffffff7620, handPos=3, bonus=0x7ffffffd6590) at dominion.c:1249
+#6  0x0000000000000000 in ?? ()
+#0  __GI_raise (sig=sig@entry=6) at ../sysdeps/unix/sysv/linux/raise.c:50
+#1  0x00007ffff7c61535 in __GI_abort () at abort.c:79
+(More stack frames follow...)
+#0  __GI_raise (sig=sig@entry=6) at ../sysdeps/unix/sysv/linux/raise.c:50
+#1  0x00007ffff7c61535 in __GI_abort () at abort.c:79
+#2  0x00007ffff7cc8516 in __libc_message (action=action@entry=do_abort, fmt=fmt@entry=0x7ffff7dec9ee "*** %s ***: %s terminated\n") at ../sysdeps/posix/libc_fatal.c:181
+#3  0x00007ffff7d6c431 in __GI___fortify_fail_abort (need_backtrace=need_backtrace@entry=false, msg=msg@entry=0x7ffff7dec9cc "stack smashing detected") at fortify_fail.c:33
+#4  0x00007ffff7d6c3f2 in __stack_chk_fail () at stack_chk_fail.c:29
+#5  0x000055555555edda in cardEffect (card=7, choice1=0, choice2=0, choice3=0, state=0x7fffffff7620, handPos=3, bonus=0x7ffffffd6590) at dominion.c:1249
+#6  0x0000000000000000 in ?? ()
+#0  __GI_raise (sig=sig@entry=6) at ../sysdeps/unix/sysv/linux/raise.c:50
+#1  0x00007ffff7c61535 in __GI_abort () at abort.c:79
+#2  0x00007ffff7cc8516 in __libc_message (action=action@entry=do_abort, fmt=fmt@entry=0x7ffff7dec9ee "*** %s ***: %s terminated\n") at ../sysdeps/posix/libc_fatal.c:181
+#3  0x00007ffff7d6c431 in __GI___fortify_fail_abort (need_backtrace=need_backtrace@entry=false, msg=msg@entry=0x7ffff7dec9cc "stack smashing detected") at fortify_fail.c:33
+#4  0x00007ffff7d6c3f2 in __stack_chk_fail () at stack_chk_fail.c:29
+#5  0x000055555555edda in cardEffect (card=7, choice1=0, choice2=0, choice3=0, state=0x7fffffff7620, handPos=3, bonus=0x7ffffffd6590) at dominion.c:1249
+#6  0x0000000000000000 in ?? ()
+#0  __GI_raise (sig=sig@entry=6) at ../sysdeps/unix/sysv/linux/raise.c:50
+        set = {__val = {0 <repeats 16 times>}}
+        pid = <optimized out>
+        tid = <optimized out>
+        ret = <optimized out>
+#1  0x00007ffff7c61535 in __GI_abort () at abort.c:79
+        save_stage = 1
+        act = {__sigaction_handler = {sa_handler = 0x0, sa_sigaction = 0x0}, sa_mask = {__val = {140737488304024, 0, 2, 0, 48, 2, 1, 140737488304024, 140737488304020, 2, 140737350477386, 
+              0, 93824992255226, 0, 140737488181984, 140737488182384}}, sa_flags = 4, sa_restorer = 0x1000}
+        sigs = {__val = {32, 0 <repeats 15 times>}}
+#2  0x00007ffff7cc8516 in __libc_message (action=action@entry=do_abort, fmt=fmt@entry=0x7ffff7dec9ee "*** %s ***: %s terminated\n") at ../sysdeps/posix/libc_fatal.c:181
+        ap = {{gp_offset = 32, fp_offset = 0, overflow_arg_area = 0x7ffffffd5c80, reg_save_area = 0x7ffffffd5c10}}
+        fd = 2
+        list = <optimized out>
+        nlist = <optimized out>
+        cp = <optimized out>
+        written = <optimized out>
+        on_2 = <optimized out>
+        next = <optimized out>
+        str = <optimized out>
+        len = <optimized out>
+        newp = <optimized out>
+        iov = <optimized out>
+        total = <optimized out>
+        cnt = <optimized out>
+        buf = <optimized out>
+        wp = <optimized out>
+        old = <optimized out>
+        cnt = <optimized out>
+        result = <optimized out>
+#3  0x00007ffff7d6c431 in __GI___fortify_fail_abort (need_backtrace=need_backtrace@entry=false, msg=msg@entry=0x7ffff7dec9cc "stack smashing detected") at fortify_fail.c:33
+No locals.
+#4  0x00007ffff7d6c3f2 in __stack_chk_fail () at stack_chk_fail.c:29
+No locals.
+#5  0x000055555555edda in cardEffect (card=7, choice1=0, choice2=0, choice3=0, state=0x7fffffff7620, handPos=3, bonus=0x7ffffffd6590) at dominion.c:1249
+        i = 0
+        j = 1
+        k = 0
+        x = 10
+        index = 10
+        currentPlayer = 1
+        nextPlayer = 0
+        tributeRevealedCards = {-1, -1}
+        temphand = {0 <repeats 44 times>, 19, 24, 20, 7, 10, 1, 16, 0 <repeats 449 times>}
+        drawntreasure = 0
+        cardDrawn = 0
+        z = 0
+#6  0x0000000000000000 in ?? ()
+No symbol table info available.
+Starting program: /home/dlamartina/School/CS362/CS362-W2019/projects/lamartid/nelsoryaDominion/randomtestadventurer 
+
+Program received signal SIGABRT, Aborted.
+__GI_raise (sig=sig@entry=6) at ../sysdeps/unix/sysv/linux/raise.c:50
+50	../sysdeps/unix/sysv/linux/raise.c: No such file or directory.
+#0  __GI_raise (sig=sig@entry=6) at ../sysdeps/unix/sysv/linux/raise.c:50
+#1  0x00007ffff7c61535 in __GI_abort () at abort.c:79
+#2  0x00007ffff7cc8516 in __libc_message (action=action@entry=do_abort, fmt=fmt@entry=0x7ffff7dec9ee "*** %s ***: %s terminated\n") at ../sysdeps/posix/libc_fatal.c:181
+#3  0x00007ffff7d6c431 in __GI___fortify_fail_abort (need_backtrace=need_backtrace@entry=false, msg=msg@entry=0x7ffff7dec9cc "stack smashing detected") at fortify_fail.c:33
+#4  0x00007ffff7d6c3f2 in __stack_chk_fail () at stack_chk_fail.c:29
+#5  0x000055555555edda in cardEffect (card=7, choice1=0, choice2=0, choice3=0, state=0x7fffffff7620, handPos=4, bonus=0x7ffffffd6590) at dominion.c:1249
+#6  0x0000000000000000 in ?? ()
