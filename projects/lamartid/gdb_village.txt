@@ -1,0 +1,34 @@
+Breakpoint 1 at 0x79ac: file dominion.c, line 687.
+Starting program: /home/dlamartina/School/CS362/CS362-W2019/projects/lamartid/nelsoryaDominion/cardtest3 
+
+Breakpoint 1, villageEffect (handPos=0, currentPlayer=0, state=0x7fffffff7630) at dominion.c:687
+687	  drawCard(currentPlayer, state);
+drawCard (player=0, state=0x7fffffff7630) at dominion.c:528
+528	  if (state->deckCount[player] <= 0){//Deck is empty
+568	    int count = state->handCount[player];//Get current hand count for player
+574	    deckCounter = state->deckCount[player];//Create holder for the deck count
+575	    state->hand[player][count] = state->deck[player][deckCounter - 1];//Add card to the hand
+576	    state->deckCount[player]--;
+577	    state->handCount[player]++;//Increment hand count
+580	  return 0;
+581	}
+villageEffect (handPos=0, currentPlayer=0, state=0x7fffffff7630) at dominion.c:690
+690	  state->numActions = state->numActions + 1; // changed + 2 to + 1
+693	  discardCard(handPos, currentPlayer, state, 0);
+discardCard (handPos=0, currentPlayer=0, state=0x7fffffff7630, trashFlag=0) at dominion.c:1255
+1255	  if (trashFlag < 1)
+1258	      state->playedCards[state->playedCardCount] = state->hand[currentPlayer][handPos];
+Invalid number "7fffffff7630".
+0x7fffffff7630:	0x00000002
+1259	      state->playedCardCount++;
+1263	  state->hand[currentPlayer][handPos] = -1;
+1266	  if ( handPos == (state->handCount[currentPlayer] - 1) ) 	//last card in hand array is played
+1271	  else if ( state->handCount[currentPlayer] == 1 ) //only one card in hand
+1279	      state->hand[currentPlayer][handPos] = state->hand[currentPlayer][ (state->handCount[currentPlayer] - 1)];
+1281	      state->hand[currentPlayer][state->handCount[currentPlayer] - 1] = -1;
+1283	      state->handCount[currentPlayer]--;
+1286	  return 0;
+1287	}
+villageEffect (handPos=0, currentPlayer=0, state=0x7fffffff7630) at dominion.c:694
+694	  return 0;
+696	}

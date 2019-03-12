@@ -1,0 +1,5 @@
+C:\Users\DAVIDL~1\AppData\Local\Temp\ccEPrvQ5.o:dominion.c:(.text+0xe1): undefined reference to `SelectStream'
+C:\Users\DAVIDL~1\AppData\Local\Temp\ccEPrvQ5.o:dominion.c:(.text+0xec): undefined reference to `PutSeed'
+C:\Users\DAVIDL~1\AppData\Local\Temp\ccEPrvQ5.o:dominion.c:(.text+0x566): undefined reference to `Random'
+c:/mingw/bin/../lib/gcc/mingw32/6.3.0/../../../libmingw32.a(main.o):(.text.startup+0xa0): undefined reference to `WinMain@16'
+collect2.exe: error: ld returned 1 exit status
