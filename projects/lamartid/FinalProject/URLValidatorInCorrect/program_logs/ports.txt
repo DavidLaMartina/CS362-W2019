@@ -1,0 +1,20 @@
+Testing valid ports by themselves...
+URLs incorrectly flagged as invalid
+
+http://www.google.com:0
+http://www.google.com:36
+http://www.google.com:234
+
+Testing valid ports with valid path...
+URLs incorrectly flagged as invalid
+
+http://www.google.com:0/testpath
+http://www.google.com:36/testpath
+http://www.google.com:234/testpath
+
+Testing invalid ports by themselves...
+URLs incorrectly flagged as valid
+
+/nTesting invalid ports with valid path
+URLs incorrectly flagged as valid
+

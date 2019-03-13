@@ -1,0 +1,11 @@
+Testing VALID top-level domains with known valid first portion of URL
+URLs incorrectly flagged as invalid
+
+
+Testing INVALID top-level domains with known valid first portion of URL
+URLs incorrectly flagged as valid
+
+http://www.google.laa
+http://www.google.3rt4
+http://www.google.ala
+http://www.google.
