@@ -1,3 +1,5 @@
+Testing invalid URLs of various combinations...
+URLs incorrectly flagged as valid:
 http://www.go.a
 http://www.go.a/#/file
 http://www.go.a/#/file??

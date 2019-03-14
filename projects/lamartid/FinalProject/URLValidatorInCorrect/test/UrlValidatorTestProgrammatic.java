@@ -23,7 +23,7 @@ public class UrlValidatorTestProgrammatic extends TestCase {
    
    public void testIsValidCombosValid() throws FileNotFoundException, UnsupportedEncodingException
    {
-	   PrintWriter writer = new PrintWriter("program_logs/isCombosValid.txt", "UTF-8");
+	   PrintWriter writer = new PrintWriter("program_logs/CombosValid.txt", "UTF-8");
 	   UrlValidator urlVal = new UrlValidator(null, null, UrlValidator.ALLOW_ALL_SCHEMES);
 	   String testURL;
 	   
@@ -33,6 +33,7 @@ public class UrlValidatorTestProgrammatic extends TestCase {
 			   "www.yahoo.com",
 			   "www.bing.com",
 			   "www.alexa.com",
+			   "12.34.35.6"
 	   };
 	   String[] ports = {
 			   ":80",
@@ -52,6 +53,8 @@ public class UrlValidatorTestProgrammatic extends TestCase {
 			   "?req1=val1",
 			   "?req1=val1&req2=val2"
 	   };
+	   writer.println("Testing valid URLs of various combinations...");
+	   writer.println("URLs incorrectly flagged as invalid:");
 	   for (String auth : authorities) {
 		   // Build all possible strings, given set of orders
 		   testURL = scheme + auth;
@@ -88,7 +91,7 @@ public class UrlValidatorTestProgrammatic extends TestCase {
 	   writer.close();
    }
    public void testIsValidCombosInvalid() throws FileNotFoundException, UnsupportedEncodingException {
-	   PrintWriter writer = new PrintWriter("program_logs/isCombosInvalid.txt", "UTF-8");
+	   PrintWriter writer = new PrintWriter("program_logs/CombosInvalid.txt", "UTF-8");
 	   UrlValidator urlVal = new UrlValidator(null, null, UrlValidator.ALLOW_ALL_SCHEMES);
 	   String testURL;
 	   
@@ -117,6 +120,8 @@ public class UrlValidatorTestProgrammatic extends TestCase {
 			   "aquery",
 			   "query?"
 	   };
+	   writer.println("Testing invalid URLs of various combinations...");
+	   writer.println("URLs incorrectly flagged as valid:");
 	   for (String auth : authorities) {
 		   // Build all possible strings, given set of orders
 		   testURL = scheme + auth;
@@ -159,9 +164,49 @@ public class UrlValidatorTestProgrammatic extends TestCase {
 	   PrintWriter writer = new PrintWriter("program_logs/auth.txt", "UTF-8");
 	   UrlValidator urlVal = new UrlValidator(null, null, UrlValidator.ALLOW_ALL_SCHEMES);
 	   String testURL;
+	   String firstPart;
+	   String[] authorities = {"google.com", "bing.com", "alexa.com", "yahoo.com"};
+	   for (String auth : authorities) {
+		   testURL = "http://" + auth;
+		   runIsValid(testURL, urlVal, writer);
+		   testURL += "/dir";
+		   runIsValid(testURL, urlVal, writer);
+	   }
 	   
-	   // 
+	   // Test authorities without www
+	   writer.println("Testing VALID authorities without 'www' prefix (should be valid)");
+	   writer.println("URLs incorrectly flagged as invalid\n");
+	   testURL = "http://google.com";
+	   runIsValid(testURL, urlVal, writer);
 	   
+	   // Test authorities of various lengths - valid
+	   writer.println("\nTesting VALID authorities of various lengths...");
+	   writer.println("URLs incorrectly flagged as invalid\n");
+	   firstPart = "http://www.abc";
+	   for (int i = 0; i < 100; i++) {
+		   firstPart += "d";
+		   testURL = firstPart + ".com";
+		   runIsValid(testURL, urlVal, writer);
+	   }
+	   // Test authorities of various lengths - INvalid - 2 dots between scheme and domain name
+	   writer.println("\nTesting INVALID authorities of various lengths - 2 dots between www and domain name");
+	   writer.println("URLs incorrectly flagged as valid\n");
+	   firstPart = "http://www..abc";
+	   for (int i = 0; i < 100; i++) {
+		   firstPart += "d";
+		   testURL = firstPart = ".com";
+		   runIsInvalid(testURL, urlVal, writer);
+	   }
+	   
+	   // Test authorities of various lengths - INvalid - 2 dots between domain name and com
+	   writer.println("\nTesting INVALID authorities of various lengths - 2 dots between domain name and com");
+	   writer.println("URLs incorrectly flagged as valid\n");
+	   firstPart = "http://www.abc..";
+	   for (int i = 0; i < 100; i++) {
+		   firstPart += "d";
+		   testURL = firstPart + ".com";
+		   runIsInvalid(testURL, urlVal, writer);
+	   }
 	   writer.close();
    }
    public void testIsValidNumericAuth() throws FileNotFoundException, UnsupportedEncodingException {
@@ -172,9 +217,48 @@ public class UrlValidatorTestProgrammatic extends TestCase {
 	   PrintWriter writer = new PrintWriter("program_logs/authNumeric.txt", "UTF-8");
 	   UrlValidator urlVal = new UrlValidator(null, null, UrlValidator.ALLOW_ALL_SCHEMES);
 	   String testURL;
+	   String firstPart;
 	   
-	   // 
-	   
+	   // Test valid ranges when there are 4 numbers
+	   writer.println("Testing VALID IP addresses (4 dot-separated numbers, each [0-255]");
+	   writer.println("URLs incorrectly flagged as invalid\n");
+	   firstPart = "http://";
+	   for (int i = 0; i < 256; i += 20) {
+		   for (int j = 0; j < 256; j += 20) {
+			   for (int k = 0; k < 256; k += 20) {
+				   for (int l = 0; l < 256; l += 20) {
+					   testURL = firstPart + Integer.toString(i) +"." + Integer.toString(j) +
+							   "." + Integer.toString(k) + "." + Integer.toString(l);
+					   runIsValid(testURL, urlVal, writer);
+				   }
+			   }
+		   }
+	   }
+	   // Test invalid ranges when there are 4 numbers
+	   writer.println("Testing INVALID IP addresses (4 dot-separated numbers, 256+)");
+	   writer.println("URLs incorrectly flagged as valid\n");
+	   firstPart = "http://";
+	   for (int i = 256; i < 512; i += 20) {
+		   for (int j = 256; j < 512; j += 20) {
+			   for (int k = 256; k < 512; k += 20) {
+				   for (int l = 256; l < 512; l += 20) {
+					   testURL = firstPart + Integer.toString(i) +"." + Integer.toString(j) +
+							   "." + Integer.toString(k) + "." + Integer.toString(l);
+					   runIsInvalid(testURL, urlVal, writer);
+				   }
+			   }
+		   }
+	   }
+	   // Test invalid numbers of elements in IP address with correct ranges
+	   writer.println("\nTest INVALID IP address with 1, 2, 3, and 5+ elements (wrong number of numbers)");
+	   writer.println("URLs incorrectly flagged as valid\n");
+	   testURL = "http://200";
+	   for (int i = 0; i < 10; i++) {
+		   if (i != 3) {
+			   testURL += ".200";
+			   runIsInvalid(testURL, urlVal, writer);
+		   }
+	   }
 	   writer.close();
    }
    public void testIsValidPorts() throws FileNotFoundException, UnsupportedEncodingException {
@@ -189,22 +273,27 @@ public class UrlValidatorTestProgrammatic extends TestCase {
 	   String testURL;
 	   
 	   String first = "http://www.google.com";		// Scheme and authority known to be valid
+	   
 	   String path = "/testpath";					// known valid path
 	   
 	   String[] validPorts = {":0", ":36", ":234", "3456", "65535"};				// Test one port of each length
 	   String[] invalidPorts = {":-1", ":abc", ":3000a", ":65536", ":999999999999"};		// various abnormalities
 	   
-	   // valid ports
+	   // valid ports loop
 	   writer.println("Testing valid ports by themselves...");
 	   writer.println("URLs incorrectly flagged as invalid\n");
-	   for (String port : validPorts) {
-		   testURL = first + port;
+	   testURL = first + ":" + Integer.toString(5);
+	   runIsValid(testURL, urlVal, writer);
+	   testURL = first + ":" + Integer.toString(55);
+	   runIsValid(testURL, urlVal, writer);
+	   for (int i = 0; i < 65536; i += 100) {
+		   testURL = first + ":" + Integer.toString(i);
 		   runIsValid(testURL, urlVal, writer);
 	   }
 	   writer.println("\nTesting valid ports with valid path...");
 	   writer.println("URLs incorrectly flagged as invalid\n");
-	   for (String port : validPorts) {
-		   testURL = first + port + path;
+	   for (int i = 0; i < 65536; i += 50) {
+		   testURL = first + ":" + Integer.toString(i) + path;
 		   runIsValid(testURL, urlVal, writer);
 	   }
 	   // invalid ports
@@ -321,30 +410,34 @@ public class UrlValidatorTestProgrammatic extends TestCase {
 	   String testURL;
 	   String first = "http://www.google.";		// Known to be valid until this point
 	   
-	   String[] validTLDs = {"com", "org", "net", "co"};
-	   String[] invalidTLDs = {"laa", "3rt4", "ala", ""};
+	   String[] validTLDs = {"com", "org", "net", "co", "rus", "au", "ca", "jp"};
+	   String[] invalidTLDs = {"laa", "3rt4", "ala", "123", "34544"};
 	   
 	   // valid TLDs
 	   writer.println("Testing VALID top-level domains with known valid first portion of URL");
 	   writer.println("URLs incorrectly flagged as invalid\n");
 	   for (String TLD : validTLDs) {	   
-		   testURL = first + TLD;
-		   runIsValid(testURL, urlVal, writer);
+		   for (int i = 0; i < 5; i++) {
+			   testURL = first + TLD;
+			   for (int j = 0; j < i; j++) {
+				   testURL += "/dir";
+			   }
+			   runIsValid(testURL, urlVal, writer);
+		   }
 	   }
 	   // Invalid TLDs
 	   writer.println("\nTesting INVALID top-level domains with known valid first portion of URL");
 	   writer.println("URLs incorrectly flagged as valid\n");
 	   for (String TLD : invalidTLDs) {	   
-		   testURL = first + TLD;
-		   runIsInvalid(testURL, urlVal, writer);
+		   for (int i = 0; i < 5; i++) {
+			   testURL = first + TLD;
+			   for (int j = 0; j < i; j++) {
+				   testURL += "/dir";
+			   }
+			   runIsInvalid(testURL, urlVal, writer);
+		   }
 	   }
 	   writer.close();
-   }
-   
-   public void testIsValidForeignTLD() {
-	   String[] validForeignTLDs = {"rus", "au", "ca", "jp" };
-	   
-	   return;
    }
    
    public static void runIsValid(String testURL, UrlValidator urlVal, PrintWriter writer) {

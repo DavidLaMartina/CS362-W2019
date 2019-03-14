@@ -1,11 +1,41 @@
 Testing VALID top-level domains with known valid first portion of URL
 URLs incorrectly flagged as invalid
 
+http://www.google.com/dir/dir
+http://www.google.com/dir/dir/dir
+http://www.google.com/dir/dir/dir/dir
+http://www.google.org/dir/dir
+http://www.google.org/dir/dir/dir
+http://www.google.org/dir/dir/dir/dir
+http://www.google.net/dir/dir
+http://www.google.net/dir/dir/dir
+http://www.google.net/dir/dir/dir/dir
+http://www.google.co/dir/dir
+http://www.google.co/dir/dir/dir
+http://www.google.co/dir/dir/dir/dir
+http://www.google.rus/dir/dir
+http://www.google.rus/dir/dir/dir
+http://www.google.rus/dir/dir/dir/dir
+http://www.google.au/dir/dir
+http://www.google.au/dir/dir/dir
+http://www.google.au/dir/dir/dir/dir
+http://www.google.ca/dir/dir
+http://www.google.ca/dir/dir/dir
+http://www.google.ca/dir/dir/dir/dir
+http://www.google.jp/dir/dir
+http://www.google.jp/dir/dir/dir
+http://www.google.jp/dir/dir/dir/dir
 
 Testing INVALID top-level domains with known valid first portion of URL
 URLs incorrectly flagged as valid
 
 http://www.google.laa
+http://www.google.laa/dir
 http://www.google.3rt4
+http://www.google.3rt4/dir
 http://www.google.ala
-http://www.google.
+http://www.google.ala/dir
+http://www.google.123
+http://www.google.123/dir
+http://www.google.34544
+http://www.google.34544/dir
